@@ -46,6 +46,10 @@ npm run offline  # builds a static site into /out and serves it at http://localh
 
 After `npm run photos` and a build, nothing needs the internet: fonts are bundled from npm (no Google Fonts requests) and photos live in `public/photos`.
 
+## Deploy (Vercel)
+
+Pushing to `main` deploys to Vercel. `vercel.json` pins the framework to Next.js (with the preset set to "Other", Vercel skipped the build and served only `public/`, so every page was a 404) and sends the same security headers as `public/serve.json`. If you change a header, change it in both files.
+
 ## Print
 
 Use **Print this page** for one section, or open **Whole book** and print that page (or save it as a PDF). Each section starts on a new printed page.
@@ -66,6 +70,7 @@ Use **Print this page** for one section, or open **Whole book** and print that p
 - `scripts/fetch-photos.mjs` — the photo downloader
 - `tests/` — Playwright end-to-end tests
 - `public/serve.json` — security headers (CSP, frame blocking, nosniff) and caching for the offline server
+- `vercel.json` — framework setting and the same security headers for the Vercel deployment
 
 ## Decisions
 
