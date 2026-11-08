@@ -1,0 +1,32 @@
+{
+  "name": "fulton-homestead-book",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Month-by-month homestead guide for Fulton County, GA: garden, plants, recipes, water, remedies, bees, chickens and fish.",
+  "scripts": {
+    "dev": "next dev",
+    "photos": "node scripts/fetch-photos.mjs",
+    "build": "next build",
+    "lint": "eslint",
+    "test:e2e": "next build && playwright test",
+    "offline": "next build && serve out -l 3000",
+    "start": "serve out -l 3000"
+  },
+  "dependencies": {
+    "@fontsource/archivo": "5.3.0",
+    "@fontsource/ibm-plex-mono": "5.3.0",
+    "@fontsource/public-sans": "5.3.0",
+    "next": "16.4.3",
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.64.1",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.4.3",
+    "serve": "14.2.6"
+  },
+  "engines": {
+    "node": ">=20.9"
+  }
+}
