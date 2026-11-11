@@ -1,4 +1,4 @@
-import CreditsSection from "@/components/sections/CreditsSection";
+import CreditsSection from "@/frontend/sections/CreditsSection";
 
 export const metadata = {
   title: "Photo credits",

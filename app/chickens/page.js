@@ -1,8 +1,8 @@
-import { ChickensSection } from "@/components/sections/AnimalSections";
+import { ChickensSection } from "@/frontend/sections/AnimalSections";
 
 export const metadata = {
   title: "Chickens",
-  description: "Backyard laying hens in Fulton County: rules, gear, coop setup and health.",
+  description: "Backyard laying hens: rules, gear, coop setup and health.",
 };
 
 export default function Page() {

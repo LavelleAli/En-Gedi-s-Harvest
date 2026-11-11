@@ -1,8 +1,8 @@
-import PlantsSection from "@/components/sections/PlantsSection";
+import PlantsSection from "@/frontend/sections/PlantsSection";
 
 export const metadata = {
-  title: "Plant index",
-  description: "Nutrition, care, problems and companion plants for 45 fruits, vegetables and herbs.",
+  title: "Plant encyclopedia",
+  description: "An A to Z encyclopedia of 57 fruits, vegetables and herbs: hardiness, planting dates for your zone, care, problems and companions.",
 };
 
 export default function Page() {
