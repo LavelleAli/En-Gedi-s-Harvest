@@ -1,11 +1,11 @@
 // Downloads free-license photos from Wikimedia Commons into public/photos
-// and records title, author and license for each one in data/photos.json.
+// and records title, author and license for each one in frontend/data/photos.json.
 //
 //   npm run photos                 fetch every slot that doesn't have a photo yet
 //   npm run photos -- --force      re-pick every slot
 //   npm run photos -- sym-spots    re-pick just the slots you name
 //
-// Edit data/photo-queries.json to change a search, or pin an exact Commons file.
+// Edit frontend/data/photo-queries.json to change a search, or pin an exact Commons file.
 // Needs Node 18+ (built-in fetch) and an internet connection; the app works offline afterward.
 
 import { readFile, writeFile, mkdir } from "node:fs/promises";
@@ -14,8 +14,8 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const QUERIES = path.join(root, "data", "photo-queries.json");
-const OUT_JSON = path.join(root, "data", "photos.json");
+const QUERIES = path.join(root, "frontend", "data", "photo-queries.json");
+const OUT_JSON = path.join(root, "frontend", "data", "photos.json");
 const OUT_DIR = path.join(root, "public", "photos");
 const API = "https://commons.wikimedia.org/w/api.php";
 const UA = "FultonHomesteadBook/1.0 (private personal gardening app)";
@@ -139,7 +139,7 @@ async function main() {
 
   console.log(`\nDone. ${got} downloaded, ${skipped} already had photos, ${missed.length} missing.`);
   if (missed.length) console.log("Missing (drawn illustrations will show instead):", missed.join(", "));
-  console.log("Review every photo at /credits/ and pin a better file in data/photo-queries.json if one is off.");
+  console.log("Review every photo at /credits/ and pin a better file in frontend/data/photo-queries.json if one is off.");
 }
 
 main().catch((err) => {

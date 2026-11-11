@@ -1,12 +1,12 @@
-import MonthSection from "@/components/sections/MonthSection";
-import CalendarSection from "@/components/sections/CalendarSection";
-import PlantsSection from "@/components/sections/PlantsSection";
-import DoctorSection from "@/components/sections/DoctorSection";
-import RecipesSection from "@/components/sections/RecipesSection";
-import PantrySection from "@/components/sections/PantrySection";
-import WaterSection from "@/components/sections/WaterSection";
-import RemediesSection from "@/components/sections/RemediesSection";
-import { BeesSection, ChickensSection, FishSection } from "@/components/sections/AnimalSections";
+import MonthSection from "@/frontend/sections/MonthSection";
+import CalendarSection from "@/frontend/sections/CalendarSection";
+import PlantsSection from "@/frontend/sections/PlantsSection";
+import DoctorSection from "@/frontend/sections/DoctorSection";
+import RecipesSection from "@/frontend/sections/RecipesSection";
+import PantrySection from "@/frontend/sections/PantrySection";
+import WaterSection from "@/frontend/sections/WaterSection";
+import RemediesSection from "@/frontend/sections/RemediesSection";
+import { BeesSection, ChickensSection, FishSection } from "@/frontend/sections/AnimalSections";
 
 export const metadata = { title: "Whole book" };
 
@@ -22,7 +22,7 @@ export default function Page() {
       </div>
       <MonthSection />
       <CalendarSection />
-      <PlantsSection printAll />
+      <PlantsSection />
       <DoctorSection />
       <RecipesSection />
       <PantrySection />

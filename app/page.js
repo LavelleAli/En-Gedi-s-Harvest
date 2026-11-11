@@ -1,5 +1,5 @@
-import MonthSection from "@/components/sections/MonthSection";
-import { Hero } from "@/components/Photo";
+import MonthSection from "@/frontend/sections/MonthSection";
+import { Hero } from "@/frontend/components/Photo";
 
 export default function Page() {
   return (

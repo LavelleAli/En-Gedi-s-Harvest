@@ -1,4 +1,4 @@
-import RemediesSection from "@/components/sections/RemediesSection";
+import RemediesSection from "@/frontend/sections/RemediesSection";
 
 export const metadata = {
   title: "Remedies",

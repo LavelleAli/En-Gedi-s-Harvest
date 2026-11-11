@@ -1,4 +1,4 @@
-import PantrySection from "@/components/sections/PantrySection";
+import PantrySection from "@/frontend/sections/PantrySection";
 
 export const metadata = {
   title: "Pantry",

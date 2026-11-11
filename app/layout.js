@@ -4,19 +4,21 @@ import "@fontsource/public-sans/400.css";
 import "@fontsource/public-sans/600.css";
 import "@fontsource/public-sans/700.css";
 import "@fontsource/ibm-plex-mono/500.css";
-import "./globals.css";
+import "@/frontend/styles/globals.css";
 
 import Link from "next/link";
-import Nav from "@/components/Nav";
-import PrintButtons from "@/components/PrintButtons";
-import RouteFocus from "@/components/RouteFocus";
-import ThemeToggle from "@/components/ThemeToggle";
-import { THEME_SCRIPT } from "@/lib/theme";
+import Sidebar from "@/frontend/components/Sidebar";
+import PrintButtons from "@/frontend/components/PrintButtons";
+import RouteFocus from "@/frontend/components/RouteFocus";
+import ThemeToggle from "@/frontend/components/ThemeToggle";
+import LocationPicker from "@/frontend/components/LocationPicker";
+import SavedDataSync from "@/frontend/account/SavedDataSync";
+import { THEME_SCRIPT } from "@/frontend/lib/theme";
 
 export const metadata = {
-  title: { default: "Fulton Homestead Book", template: "%s · Fulton Homestead Book" },
+  title: { default: "En Gedi's Harvest", template: "%s · En Gedi's Harvest" },
   description:
-    "Month-by-month homestead guide for Fulton County, Georgia: garden calendar, plant index, plant doctor, recipes, water, remedies, bees, chickens and fish.",
+    "A month-by-month homestead guide for any North American hardiness zone: garden calendar, plant encyclopedia, 3D garden planner, plant doctor, recipes, water, remedies, bees, chickens and fish.",
 };
 
 export const viewport = {
@@ -45,29 +47,32 @@ export default function RootLayout({ children }) {
           </div>
           <div className="wrap">
             <div className="brand">
-              <div className="kicker">Zone 8a · Piedmont red clay · Fulton County, GA</div>
+              <LocationPicker />
               <h1>
                 <Link href="/">
-                  Fulton <span>Homestead</span> Book
+                  En Gedi&apos;s <span>Harvest</span>
                 </Link>
               </h1>
-              <p>Garden, kitchen, bees, chickens, fish and water, month by month.</p>
+              <p>Garden, kitchen, bees, chickens, fish and water, month by month, for your zone.</p>
             </div>
             <div className="mast-actions">
-              <ThemeToggle />
               <PrintButtons />
             </div>
           </div>
+          {/* Last in the masthead so it reads after the brand; CSS pins it to the top-right corner. */}
+          <ThemeToggle />
         </header>
-        <Nav />
+        <Sidebar />
         <main className="wrap" id="main" tabIndex={-1}>
           {children}
         </main>
         <RouteFocus />
+        <SavedDataSync />
         <footer>
           <div className="wrap">
-            Written for zone 8a, Fulton County, Georgia. Rules and recommendations change: check your city, Georgia DNR and UGA
-            Extension before acting on anything legal or medical. Photos are from Wikimedia Commons under free licenses; see Photo credits.
+            Planting dates are averages for your hardiness zone; your local frost dates can differ by a few weeks. Rules and recommendations
+            change: check your city or county, your state or provincial agencies, and your local extension service before acting on anything
+            legal or medical. Photos are from Wikimedia Commons under free licenses; see Photo credits.
           </div>
         </footer>
       </body>

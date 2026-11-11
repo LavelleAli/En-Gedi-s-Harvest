@@ -2,29 +2,42 @@
   "name": "fulton-homestead-book",
   "version": "1.0.0",
   "private": true,
-  "description": "Month-by-month homestead guide for Fulton County, GA: garden, plants, recipes, water, remedies, bees, chickens and fish.",
+  "description": "En Gedi's Harvest: a month-by-month homestead guide for any North American hardiness zone, with a 3D garden planner: garden, plants, recipes, water, remedies, bees, chickens and fish.",
   "scripts": {
     "dev": "next dev",
     "photos": "node scripts/fetch-photos.mjs",
     "build": "next build",
     "lint": "eslint",
-    "test:e2e": "next build && playwright test",
-    "offline": "next build && serve out -l 3000",
-    "start": "serve out -l 3000"
+    "test:e2e": "STATIC_EXPORT=1 next build && playwright test",
+    "offline": "STATIC_EXPORT=1 next build && serve out -l 3000",
+    "start": "serve out -l 3000",
+    "build:static": "STATIC_EXPORT=1 next build"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "1.7.0",
+    "@firebase/app": "0.16.4",
+    "@firebase/auth": "1.13.8",
     "@fontsource/archivo": "5.3.0",
     "@fontsource/ibm-plex-mono": "5.3.0",
     "@fontsource/public-sans": "5.3.0",
+    "@gsap/react": "2.1.2",
+    "firebase-admin": "14.5.0",
+    "gsap": "3.15.0",
     "next": "16.4.3",
     "react": "19.3.1",
-    "react-dom": "19.3.1"
+    "react-dom": "19.3.1",
+    "stripe": "23.0.1",
+    "three": "0.186.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@playwright/test": "1.64.1",
+    "@tailwindcss/postcss": "4.3.3",
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.3",
-    "serve": "14.2.6"
+    "serve": "14.2.6",
+    "tailwindcss": "4.3.3",
+    "vitest": "5.0.5"
   },
   "engines": {
     "node": ">=20.9"

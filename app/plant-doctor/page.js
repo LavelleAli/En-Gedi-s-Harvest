@@ -1,4 +1,4 @@
-import DoctorSection from "@/components/sections/DoctorSection";
+import DoctorSection from "@/frontend/sections/DoctorSection";
 
 export const metadata = {
   title: "Plant doctor",
