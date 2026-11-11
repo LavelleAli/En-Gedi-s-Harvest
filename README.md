@@ -58,11 +58,11 @@ Every plant A to Z, with a letter index. Each entry has a facts box (family, typ
 
 **Sync across devices.** While you're signed in, your starred plants, gear checklists, monthly to-dos and garden plan follow you to your other devices. Your location and light/dark choice stay on each device. Changes are sent about a second after you make them, and another device picks them up when you switch back to its tab. Deleting your account deletes the synced copies too.
 
-How it works in the code: `frontend/account/SavedDataSync.js` watches each store's change event and calls `/api/saved/`; `backend/saved/service.js` decides what's allowed (five keys, about 200 KB each, newest save wins); `backend/saved/store.js` keeps it in Firestore at `savedData/{uid}/items/{key}`; `frontend/account/sync.js` settles conflicts when two devices disagree. The list of what syncs is in `shared/saved-data.js`.
+How it works in the code: `frontend/account/SavedDataSync.ts` watches each store's change event and calls `/api/saved/`; `backend/saved/service.ts` decides what's allowed (five keys, about 200 KB each, newest save wins); `backend/saved/store.ts` keeps it in Firestore at `savedData/{uid}/items/{key}`; `frontend/account/sync.ts` settles conflicts when two devices disagree. The list of what syncs is in `shared/saved-data.ts`.
 
 ### 7. Sidebar and shop
 
-The **sidebar** (left on wider screens, along the bottom on phones) has **Account**, **Profile**, **Tools** and **Shop**. **Tools** opens a window listing every page of the book; it fades in and out over half a second. **Profile** shows your garden location and what you've saved, and whether it syncs. **Shop** lists the gear the guides call for (beekeeping, water filtration, garden supplies). The items are placeholders for now, with no prices or checkout; they're in `frontend/data/shop.js`, and their photos download with `npm run photos`.
+The **sidebar** (left on wider screens, along the bottom on phones) has **Account**, **Profile**, **Tools** and **Shop**. **Tools** opens a window listing every page of the book; it fades in and out over half a second. **Profile** shows your garden location and what you've saved, and whether it syncs. **Shop** lists the gear the guides call for (beekeeping, water filtration, garden supplies). The items are placeholders for now, with no prices or checkout; they're in `frontend/data/shop.ts`, and their photos download with `npm run photos`.
 
 ### Other sections
 
@@ -150,34 +150,34 @@ How a plant lookup flows:
 ## How the code is organized
 
 ```
-app/                 Next.js routes only: each page.js renders a component from frontend/,
-│                    each api/**/route.api.js re-exports a handler from backend/
-├─ layout.js         masthead, tabs, footer, theme script
+app/                 Next.js routes only: each page.tsx renders a component from frontend/,
+│                    each api/**/route.api.ts re-exports a handler from backend/
+├─ layout.tsx        masthead, tabs, footer, theme script
 ├─ planner/ account/ plants/ calendar/ …     one folder per page
 └─ api/              plants, plants/research, account, billing/{checkout,portal,webhook}
 frontend/            everything that runs in the browser
 ├─ sections/         each page's content (also reused by /book/)
 ├─ planner/          PlannerApp, GardenScene (three.js), Editors, Report, AddCropDialog,
-│                    and pure logic: sun.js (solar position), shade.js (sun-hours map),
-│                    analysis.js (companions, planting notes, watering), model.js (saved plan)
-├─ account/          Firebase sign-in (auth.js), API client (api.js), AccountPage
+│                    and pure logic: sun.ts (solar position), shade.ts (sun-hours map),
+│                    analysis.ts (companions, planting notes, watering), model.ts (saved plan)
+├─ account/          Firebase sign-in (auth.ts), API client (api.ts), AccountPage
 ├─ components/       shared UI: Sidebar, Nav (the Tools window), LocationPicker, ZoneMap, ThemeToggle, Photo, …
-├─ lib/              browser state (location, theme, monthly checklist) and motion.js (GSAP settings)
+├─ lib/              browser state (location, theme, monthly checklist) and motion.ts (GSAP settings)
 ├─ data/             the book's content: calendar, plants, recipes, guides, photos
 └─ styles/           globals.css (design tokens, light and dark themes, Tailwind setup)
 backend/             everything that runs on the server (Vercel functions)
-├─ handlers/         route handlers and the services they use (deps.js)
-├─ plants/           service.js (lookup rules), research.js (Claude), library.js (Firestore)
-├─ accounts/         repository.js (plans, monthly quota, Stripe event log)
-├─ billing/          service.js (Checkout, portal, webhooks)
-├─ config.js         environment variables, validated with Zod
-├─ http.js           problem-details errors, request IDs, logs, rate limiting
-└─ firebase.js       Firebase Admin: token checks and Firestore
+├─ handlers/         route handlers and the services they use (deps.ts)
+├─ plants/           service.ts (lookup rules), research.ts (Claude), library.ts (Firestore)
+├─ accounts/         repository.ts (plans, monthly quota, Stripe event log)
+├─ billing/          service.ts (Checkout, portal, webhooks)
+├─ config.ts         environment variables, validated with Zod
+├─ http.ts           problem-details errors, request IDs, logs, rate limiting
+└─ firebase.ts       Firebase Admin: token checks and Firestore
 shared/              used by both sides
-├─ zones.js          USDA zones and frost dates
-├─ crop.js           the crop record schema (Zod) and name matching
-├─ catalog.js        the 57-plant stock catalog
-└─ planting.js       planting windows and zone suggestions
+├─ zones.ts          USDA zones and frost dates
+├─ crop.ts           the crop record schema (Zod) and name matching
+├─ catalog.ts        the 57-plant stock catalog
+└─ planting.ts       planting windows and zone suggestions
 tests/               Playwright end-to-end tests (desktop Chrome, phone Safari)
 **/__tests__/        Vitest unit tests (shared, planner math, backend rules)
 ```
@@ -196,13 +196,34 @@ Each tool does the job it's best at:
   `font-display` match the rest of the site in both themes, and `dark:` follows the site's theme switch.
   Tailwind's base reset (preflight) is left out so the older styles keep working. The app moves over a
   piece at a time, whenever that piece is being changed anyway. Done so far: the 3D view's overlay
-  (`frontend/planner/ViewControls.js`).
+  (`frontend/planner/ViewControls.tsx`).
 - **GSAP**: anything that moves on its own. That covers the 500ms page fade between pages
-  (`app/template.js`), the window fades (`frontend/lib/useFadeDialog.js`), list items fading up as they
-  scroll into view (`frontend/components/Reveal.js`) and the planner camera gliding between views
-  (`frontend/planner/blenderNav.js`). Shared timing lives in `frontend/lib/motion.js`. Every animation
+  (`app/template.tsx`), the window fades (`frontend/lib/useFadeDialog.ts`), list items fading up as they
+  scroll into view (`frontend/components/Reveal.tsx`) and the planner camera gliding between views
+  (`frontend/planner/blenderNav.ts`). Shared timing lives in `frontend/lib/motion.ts`. Every animation
   is skipped when the reader's system asks for reduced motion, and everything shows when printing.
-- **three.js**: the 3D garden planner (`frontend/planner/GardenScene.js`, `houseModel.js`).
+- **three.js**: the 3D garden planner (`frontend/planner/GardenScene.tsx`, `houseModel.ts`).
+
+## TypeScript
+
+The whole project is TypeScript in strict mode: `.ts` for logic, `.tsx` for anything that renders.
+
+- **Shared shapes live next to the data they describe.** A crop is `Crop` (from the Zod schema in
+  `shared/crop.ts`), and a garden plan is `Garden`, `Bed` and `Obstacle` (from the schema in
+  `frontend/planner/model.ts`). An API answer the browser reads has one type used by both sides
+  (`shared/account.ts`, and `LookupResult` in `backend/plants/service.ts`). Where a Zod schema exists,
+  the type comes from it with `z.infer`, so the check that runs on real data and the type can't disagree.
+- **API calls name what they expect back:** `api<{ items: … }>("/api/saved/")`.
+- **Services take their dependencies as interfaces** (`AccountStore`, `PlantLibrary`, `SavedStore`,
+  `StripeLike`), so the unit tests pass small in-memory fakes with the same methods.
+- **Test helpers:** `frontend/planner/__tests__/fixtures.ts` builds a full bed, shade source or garden
+  from just the fields a test cares about.
+- **What stays JavaScript:** the config files ESLint and PostCSS load (`eslint.config.mjs`,
+  `postcss.config.mjs`) and the two Node scripts in `scripts/`, so they run with plain `node`.
+  `fetch-photos.mjs` is still type-checked through `// @ts-check` and JSDoc comments;
+  `build-us-map.mjs` isn't, because it runs from a scratch folder with packages this project doesn't install.
+- **`tsconfig.json` is partly managed by Next.js,** which reformats it and adds its own `include`
+  entries on every build. Edit it if you need to, but expect Next.js to reformat it.
 
 ## Running it
 
@@ -238,8 +259,9 @@ Use test keys while trying it out; locally, `stripe listen --forward-to localhos
 ## Checking your work
 
 ```bash
+npm run typecheck                         # TypeScript, strict mode (next build runs this too)
 npm run lint                              # ESLint
-npx vitest run                            # unit tests: zones, catalog, sun and shade math, bed analysis, backend rules
+npm test                                  # unit tests: zones, catalog, sun and shade math, bed analysis, backend rules
 npx playwright install chromium webkit    # first time only
 npm run test:e2e                          # builds the offline site, then tests it in desktop Chrome and phone Safari
 ```
@@ -247,7 +269,7 @@ npm run test:e2e                          # builds the offline site, then tests 
 ## Builds and deploying
 
 - **Online (Vercel):** pushing to `main` deploys. `vercel.json` pins the Next.js framework and sets the security headers. Pages are static; the `/api/*` routes run as serverless functions.
-- **Offline:** `npm run offline` builds a static site into `/out` (with `STATIC_EXPORT=1`) and serves it at http://localhost:3000. Files ending in `.api.js` are left out of that build, so the offline copy has no server code. Accounts and research then say they need the online version, and everything else works.
+- **Offline:** `npm run offline` builds a static site into `/out` (with `STATIC_EXPORT=1`) and serves it at http://localhost:3000. Files ending in `.api.ts` are left out of that build, so the offline copy has no server code. Accounts and research then say they need the online version, and everything else works.
 
 ## Decisions
 
@@ -257,10 +279,10 @@ npm run test:e2e                          # builds the offline site, then tests 
 - **Quota is counted before research and refunded on failure,** inside a Firestore transaction, so two tabs can't overspend it.
 - **Stripe is the source of truth for subscriptions.** Webhooks are signature-checked and each event is applied once.
 - **Accounts store no personal data in Firestore.** Firebase Authentication holds email and name; deleting an account cancels billing and removes both.
-- **Zones and frost dates:** average last spring and first fall frost per USDA zone (`shared/zones.js`). The month calendar, written for 8a, shifts by the difference. Crop records store planting windows as weeks from frost, so one record works in every zone. Dates are least precise in zones 1–4 and 10–13, and the app says so there.
-- **Sun math** uses NOAA's solar-position equations (`frontend/planner/sun.js`). The sun-hours map casts a ray toward the sun from each cell of a grid over the yard, every 15 minutes from sunrise to sunset, against the house, sheds, hedges, fences and tree canopies.
+- **Zones and frost dates:** average last spring and first fall frost per USDA zone (`shared/zones.ts`). The month calendar, written for 8a, shifts by the difference. Crop records store planting windows as weeks from frost, so one record works in every zone. Dates are least precise in zones 1–4 and 10–13, and the app says so there.
+- **Sun math** uses NOAA's solar-position equations (`frontend/planner/sun.ts`). The sun-hours map casts a ray toward the sun from each cell of a grid over the yard, every 15 minutes from sunrise to sunset, against the house, sheds, hedges, fences and tree canopies.
 - **three.js** draws the yard, and loads only on the planner page. It renders on demand, not in a loop, and follows the light and dark theme. Every action in the 3D view can also be done from the panel, for keyboard and screen-reader users.
 - **Fonts and photos are local** (no Google Fonts or image CDNs). The only outside services are the ones you set up: Firebase, Anthropic and Stripe.
 - **Plain CSS with design tokens** in `frontend/styles/globals.css`, in cascade layers, with light and dark themes from the same tokens. The theme switch applies before first paint. The dark token block appears twice (OS dark and saved dark), so edit both.
-- **The bee, chicken and fish guides** are trusted, author-written HTML in `frontend/data/animals.js`, rendered with `dangerouslySetInnerHTML`. Their laws and seasons are for Georgia, and each guide says so.
+- **The bee, chicken and fish guides** are trusted, author-written HTML in `frontend/data/animals.ts`, rendered with `dangerouslySetInnerHTML`. Their laws and seasons are for Georgia, and each guide says so.
 - **The CSP allows `'unsafe-inline'` scripts,** because the static export inlines hydration scripts, plus Firebase's sign-in hosts. Security headers live in `vercel.json` (online) and `public/serve.json` (offline); change both together.

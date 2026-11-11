@@ -1,3 +1,4 @@
+// @ts-check
 // Downloads free-license photos from Wikimedia Commons into public/photos
 // and records title, author and license for each one in frontend/data/photos.json.
 //
@@ -26,6 +27,7 @@ const FREE = /(cc0|public domain|^pd|cc[ -]?by|attribution|gfdl|no restrictions)
 const NOT_FREE = /(\bnc\b|non-?commercial|\bnd\b|no-?deriv)/i;
 
 // Only keep https links from Wikimedia/Creative Commons domains, since they end up in href/src.
+/** @param {string} u @param {string[]} hosts */
 const safeUrl = (u, hosts) => {
   try {
     const url = new URL(u);
@@ -37,9 +39,11 @@ const safeUrl = (u, hosts) => {
 const MEDIA_HOSTS = ["wikimedia.org", "wikipedia.org"];
 const LICENSE_HOSTS = ["creativecommons.org", "wikimedia.org", "wikipedia.org", "gnu.org"];
 
+/** @param {number} ms */
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const stripHtml = (s = "") => s.replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim();
 
+/** @param {Record<string, string>} params @returns {Promise<any>} Wikimedia's JSON answer */
 async function api(params) {
   const url = new URL(API);
   for (const [k, v] of Object.entries({ format: "json", origin: "*", ...params })) url.searchParams.set(k, v);
@@ -50,6 +54,7 @@ async function api(params) {
 
 const INFO = { prop: "imageinfo", iiprop: "url|extmetadata|mime|size", iiurlwidth: String(WIDTH) };
 
+/** @param {any} page one page from Wikimedia's answer */
 function usable(page) {
   const ii = page?.imageinfo?.[0];
   if (!ii || !/^image\/(jpeg|png|webp)$/.test(ii.mime)) return null;
@@ -69,6 +74,7 @@ function usable(page) {
   };
 }
 
+/** @param {string} slot @param {{ query?: string, file?: string }} spec */
 async function pick(slot, spec) {
   if (spec.file) {
     const data = await api({ action: "query", titles: spec.file, ...INFO });
@@ -131,7 +137,7 @@ async function main() {
       console.log(`ok (${hit.license})`);
       got++;
     } catch (err) {
-      console.log(`failed: ${err.message}`);
+      console.log(`failed: ${err instanceof Error ? err.message : err}`);
       missed.push(slot);
     }
     await sleep(400); // be polite to Wikimedia's servers

@@ -90,7 +90,7 @@
     --mast-bg: #1d3125; --mast-fg: #f5f2e9; --mast-muted: #c0cabd; --mast-accent: #f1c54b;
     --mast-line: rgb(255 255 255 / 0.18); --mast-hover: rgb(255 255 255 / 0.1);
 
-    /* drawings in lib/art.js */
+    /* drawings in data/art.ts */
     --leaf: #2f8f45; --leaf-dark: #1b5e2b; --leaf-yellow: #e2c13c; --spot: #6b4421; --mildew: #f4f4ee;
     --scorch: #8a5a2b; --tomato: #d6382d; --rot: #3a2a1c; --stalk: #3f7a3a;
 
@@ -192,8 +192,8 @@
     overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
   }
 
-  /* Page transition: every route fades in over 500ms (app/template.js remounts on navigation). */
-  /* .page-fade: each new page fades in over 500ms; GSAP drives it (app/template.js). */
+  /* Page transition: every route fades in over 500ms (app/template.tsx remounts on navigation). */
+  /* .page-fade: each new page fades in over 500ms; GSAP drives it (app/template.tsx). */
 
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { transition-duration: 0.01ms !important; }
@@ -679,7 +679,7 @@
   .scene-help summary { cursor: pointer; }
   .scene-help ul { margin-block: var(--s-2) 0; padding-inline-start: 1.2em; display: grid; gap: var(--s-1); }
 
-  /* The 3D view's overlay (ViewControls.js) is styled with Tailwind classes in the component. */
+  /* The 3D view's overlay (ViewControls.tsx) is styled with Tailwind classes in the component. */
   .heat-legend {
     position: absolute; inset-inline-start: var(--s-3); inset-block-start: var(--s-3);
     display: flex; flex-wrap: wrap; gap: var(--s-1) var(--s-3); max-inline-size: calc(100% - 1.5rem);
@@ -784,7 +784,7 @@
     .stripe, nav.tabs, .mast-actions, .toolbar, .star, .yearcal, .noprint, .location-change, .letter-index, .planner-toolbar, .planner-sun, .scene-wrap, .planner-panel, dialog { display: none !important; }
     .planner-main { display: block; }
     .todo-progress .mtile-bar { display: none; }
-    /* Everything prints, even list items that haven't scrolled into view yet (Reveal.js). */
+    /* Everything prints, even list items that haven't scrolled into view yet (Reveal.tsx). */
     .page-fade, .reveal-item { opacity: 1 !important; transform: none !important; }
     .book > .view { break-before: page; border-block-start: 0; margin-block-start: 0; padding-block-start: 0; }
     .book > .view:first-child { break-before: auto; }
@@ -799,7 +799,7 @@
 
 /* ---------- sidebar, fade windows, zone map, shop ---------- */
 @layer components {
-  /* Sidebar: Account, Profile, Tools, Shop (frontend/components/Sidebar.js).
+  /* Sidebar: Account, Profile, Tools, Shop (frontend/components/Sidebar.tsx).
      Phones: a bar along the bottom. Wider screens: a column down the left. */
   .sidebar {
     position: fixed; inset: auto 0 0 0; z-index: 20;
@@ -830,7 +830,7 @@
   }
 
   /* Windows that fade in and out over 500ms. GSAP animates the window's opacity and position and the
-     --shown variable (frontend/lib/useFadeDialog.js); the backdrop follows --shown. */
+     --shown variable (frontend/lib/useFadeDialog.ts); the backdrop follows --shown. */
   .fade-dialog { opacity: 0; }
   .fade-dialog::backdrop { opacity: var(--shown, 1); }
 
@@ -847,7 +847,7 @@
   .tools-grid .dot { flex: none; width: 8px; height: 8px; border-radius: 50%; }
   .tools-grid a[aria-current="page"] .dot { box-shadow: 0 0 0 2px var(--bg); }
 
-  /* Zone map (frontend/components/ZoneMap.js). */
+  /* Zone map (frontend/components/ZoneMap.tsx). */
   .zone-map { position: relative; display: grid; gap: var(--s-3); }
   .zone-map svg { display: block; width: 100%; height: auto; max-width: 100%; }
   .zone-map path { stroke: var(--panel); stroke-width: 1; cursor: pointer; transition: opacity var(--hover) var(--ease-in-out), stroke var(--hover) var(--ease-in-out), stroke-width var(--hover) var(--ease-in-out); }
@@ -871,7 +871,7 @@
   .zone-legend i { width: 0.9rem; height: 0.9rem; border-radius: 3px; }
   .zone-legend::before { content: "Zone"; font-weight: 600; }
 
-  /* Shop (frontend/sections/ShopSection.js). */
+  /* Shop (frontend/sections/ShopSection.tsx). */
   .shop-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: var(--s-4); padding: 0; margin: 0; list-style: none; }
   .shop-item { display: grid; grid-template-rows: auto 1fr; gap: var(--s-3); padding: var(--s-3); background: var(--panel); border: 1px solid var(--line); border-radius: var(--r-lg); box-shadow: var(--shadow-1); }
   .shop-item .stack-sm { align-content: start; }
@@ -890,14 +890,14 @@
   }
 }
 
-/* Planner: preset yard sizes under the acreage field (frontend/planner/Editors.js). */
+/* Planner: preset yard sizes under the acreage field (frontend/planner/Editors.tsx). */
 @layer components {
   .acre-presets { display: flex; flex-wrap: wrap; gap: var(--s-1); }
   .acre-presets button { min-height: 2rem; padding: 0.15rem var(--s-3); font-size: var(--t-sm); }
   .acre-presets button[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
 }
 
-/* Planner: Shade sources panel on the left (frontend/planner/ShadePalette.js).
+/* Planner: Shade sources panel on the left (frontend/planner/ShadePalette.tsx).
    Phones: stacked above the 3D view. 60em+: panel left, 3D view right, editor under the view.
    90em+: three columns: shade sources | 3D view | editor. */
 @layer components {
