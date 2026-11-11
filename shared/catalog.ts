@@ -2,6 +2,7 @@
 // zones. Planting windows are in weeks from the zone's frost dates, so one record works in every zone.
 // `book` is the plant's name in the encyclopedia (frontend/data/plants.ts) when it has a full entry.
 import { CropSchema, type Crop } from "@/shared/crop";
+import { FLOWERS } from "@/shared/flowers";
 
 const DEFAULTS = { life: "annual", rootIn: 12, firstHarvest: "", bed: "either", bedNote: "", summary: "", origin: "stock", sources: [] };
 
@@ -12,7 +13,7 @@ function crop(id: string, name: string, base: Record<string, unknown>, grow: Rec
   return CropSchema.parse({ ...DEFAULTS, id, name, ...base, ...grow });
 }
 
-export const CATALOG: Crop[] = [
+const STOCK: Crop[] = [
   crop("blueberry", "Blueberry", { book: "Blueberry (rabbiteye)", botanical: "Vaccinium spp.", family: "Ericaceae", kind: "fruit", life: "perennial", habit: "shrub", zones: [3, 9], season: "perennial" },
     { sunHours: 6, shadeOk: false, waterIn: 1.5, spacingIn: 66, heightFt: 6, rootIn: 18, days: null, firstHarvest: "Year 2–3", method: "container", depthIn: 0, spring: [-6, 2], fall: [-6, 0], fallMinZone: 7,
       how: "Plant in acidic soil (pH 4.5–5.5) mixed with pine bark, at the depth it grew in the pot, and mulch 3 in deep. Choose the type for your zone: half-high in zones 3–5, northern highbush in 4–7, rabbiteye or southern highbush in 7–9. Plant two varieties of the same type.",
@@ -216,5 +217,8 @@ export const CATALOG: Crop[] = [
       how: "Plant while dormant with the graft union 2 in above the soil, and stake dwarf trees. You need a second variety that blooms at the same time.",
       bed: "in-ground", friends: ["chives"], foes: [] }),
 ];
+
+// Food crops first, then the named roses, peonies and camellias from the En Gedi rose garden list.
+export const CATALOG: Crop[] = [...STOCK, ...FLOWERS];
 
 export const CATALOG_BY_ID: Record<string, Crop> = Object.fromEntries(CATALOG.map((c) => [c.id, c]));

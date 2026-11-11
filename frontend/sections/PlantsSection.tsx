@@ -9,7 +9,7 @@ import { SYM } from "@/frontend/data/art";
 import { OK_SLOT } from "@/frontend/data/healthy";
 import { slug } from "@/shared/slug";
 import { CATALOG } from "@/shared/catalog";
-import { KIND_LABEL, METHOD_LABEL, findCrop, suitsZone, zoneRangeText, type Crop, type Life } from "@/shared/crop";
+import { FLOWER_GROUPS, FLOWER_GROUP_LABEL, KIND_LABEL, METHOD_LABEL, findCrop, suitsZone, zoneRangeText, type Crop, type FlowerGroup, type Life } from "@/shared/crop";
 import { plantingWindows, seasonFit, windowText } from "@/shared/planting";
 import { zoneNumber } from "@/shared/zones";
 import { useLocation } from "@/frontend/lib/location";
@@ -21,10 +21,12 @@ const FILTERS = [
   ["fruit", "Fruits"],
   ["veg", "Vegetables"],
   ["herb", "Herbs"],
+  ["flower", "Roses & flowers"],
   ["zone", "Grows in my zone"],
   ["star", "★ My garden"],
 ];
 const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+const FLOWER_ONE: Record<FlowerGroup, string> = { rose: "Rose", peony: "Peony", camellia: "Camellia", companion: "Flowering companion" };
 const LIFE: Record<Life, string> = { annual: "Annual", biennial: "Biennial", perennial: "Perennial" };
 
 // Starred plants live in localStorage; this hook keeps every entry in sync with it.
@@ -80,7 +82,7 @@ const ENTRIES: Entry[] = CATALOG.map((crop) => {
 // "Basil, marigolds, carrots" -> links to entries for the names that have one.
 // Pass `text` (a book list like "Basil, marigolds") or `names` (a catalog crop's ids or names).
 function CompanionList({ text, names }: { text?: string; names?: string[] }) {
-  const parts = text ? text.split(/,\s*|;\s*/) : (names ?? []);
+  const parts = text ? text.split(/,\s*|;\s*|\s+\+\s+/) : (names ?? []);
   return (
     <>
       {parts.map((part, i) => {
@@ -102,6 +104,7 @@ function Infobox({ entry, zone }: { entry: Entry; zone: string }) {
   const photo = getPhoto(`plant-${slug(entry.title)}`);
   const windows = plantingWindows(crop, zone);
   const fits = suitsZone(crop, zoneNumber(zone));
+  const fl = crop.flower;
   return (
     <aside className="infobox" aria-label={`${entry.title} at a glance`}>
       {photo && (
@@ -111,13 +114,23 @@ function Infobox({ entry, zone }: { entry: Entry; zone: string }) {
       )}
       <dl>
         {crop.family && <><dt>Family</dt><dd><i>{crop.family}</i></dd></>}
-        <dt>Type</dt><dd>{KIND_LABEL[crop.kind]}, {LIFE[crop.life].toLowerCase()}</dd>
+        <dt>Type</dt><dd>{fl?.type || `${KIND_LABEL[crop.kind]}, ${LIFE[crop.life].toLowerCase()}`}</dd>
+        {fl?.height && <><dt>Height</dt><dd>{fl.height}</dd></>}
+        {fl?.color && <><dt>Color</dt><dd>{fl.color}</dd></>}
+        {fl?.scent && <><dt>Scent</dt><dd>{fl.scent}</dd></>}
         <dt>Hardiness</dt><dd>{zoneRangeText(crop)}</dd>
-        <dt>Sun</dt><dd>{book ? book.care[0] : `${crop.sunHours}+ hours${crop.shadeOk ? "; tolerates part shade" : ""}`}</dd>
+        <dt>Sun</dt><dd>{book ? book.care[0] : fl?.sun || `${crop.sunHours}+ hours${crop.shadeOk ? "; tolerates part shade" : ""}`}</dd>
         <dt>Water</dt><dd>{book ? book.care[1] : `About ${crop.waterIn} in a week`}</dd>
         {book && <><dt>Soil</dt><dd>{book.care[2]}</dd></>}
-        <dt>Spacing</dt><dd>{book ? book.care[4] : `${crop.spacingIn} in apart`}</dd>
-        <dt>Harvest</dt><dd>{crop.days ? `${crop.days[0]}–${crop.days[1]} days from planting` : crop.firstHarvest}</dd>
+        <dt>{fl ? "Space" : "Spacing"}</dt><dd>{book ? book.care[4] : fl?.space || `${crop.spacingIn} in apart`}</dd>
+        {fl ? (
+          <>
+            <dt>Blooms</dt><dd>{fl.bloom || crop.firstHarvest}</dd>
+            {fl.disease && <><dt>Disease</dt><dd>{fl.disease}</dd></>}
+          </>
+        ) : (
+          <><dt>Harvest</dt><dd>{crop.days ? `${crop.days[0]}–${crop.days[1]} days from planting` : crop.firstHarvest}</dd></>
+        )}
         <dt>Zone {zone}</dt>
         <dd>
           {!fits
@@ -142,7 +155,7 @@ function EntryArticle({ entry, zone, starred, onStar }: { entry: Entry; zone: st
           <p className="entry-sub">
             {crop.botanical && <i>{crop.botanical}</i>}
             {crop.botanical && " · "}
-            {book ? TYPE[book.t] : KIND_LABEL[crop.kind]} · {LIFE[crop.life]}
+            {book ? TYPE[book.t] : crop.flower ? FLOWER_ONE[crop.flower.group] : KIND_LABEL[crop.kind]} · {LIFE[crop.life]}
           </p>
         </div>
         <button className="star noprint" type="button" aria-label={`Star ${title}`} aria-pressed={!!starred} onClick={() => onStar(title)}>
@@ -163,6 +176,7 @@ function EntryArticle({ entry, zone, starred, onStar }: { entry: Entry; zone: st
           {METHOD_LABEL[crop.method]}{crop.depthIn ? `, ${crop.depthIn} in deep` : ""}. {crop.bedNote}
           {!fit.ok && ` ${fit.note}`}
         </p>
+        {crop.flower?.note && <p className="pmeta">{crop.flower.note}</p>}
         {book && (
           <>
             <h5>A healthy plant</h5>
@@ -188,6 +202,25 @@ function EntryArticle({ entry, zone, starred, onStar }: { entry: Entry; zone: st
             </ul>
           </>
         )}
+        {crop.flower?.companions && (
+          <>
+            <h5>Companions</h5>
+            <dl className="kv">
+              <dt>Plant with</dt>
+              <dd><CompanionList text={crop.flower.companions} /></dd>
+            </dl>
+          </>
+        )}
+        {crop.flower && crop.sources.length > 0 && (
+          <>
+            <h5>Sources</h5>
+            <ul className="pmeta">
+              {crop.sources.map((s) => (
+                <li key={s.url}><a href={s.url} target="_blank" rel="noopener noreferrer">{s.title}</a></li>
+              ))}
+            </ul>
+          </>
+        )}
         {(book || crop.friends.length > 0 || crop.foes.length > 0) && (
           <>
             <h5>Companions</h5>
@@ -207,6 +240,7 @@ function EntryArticle({ entry, zone, starred, onStar }: { entry: Entry; zone: st
 export default function PlantsSection() {
   const [q, setQ] = useState("");
   const [filter, setFilter] = useState("all");
+  const [group, setGroup] = useState<FlowerGroup | "all">("all");
   const [stars, toggle] = useStars();
   const location = useLocation();
 
@@ -216,14 +250,16 @@ export default function PlantsSection() {
     return ENTRIES.filter(({ crop, book, title }) => {
       if (filter === "star" && !stars[title]) return false;
       if (filter === "zone" && !suitsZone(crop, zoneNum)) return false;
-      if (["fruit", "veg", "herb"].includes(filter) && crop.kind !== filter) return false;
+      if (["fruit", "veg", "herb", "flower"].includes(filter) && crop.kind !== filter) return false;
+      if (filter === "flower" && group !== "all" && crop.flower?.group !== group) return false;
       if (!needle) return true;
-      const text = [title, crop.name, crop.botanical, crop.family, crop.summary, crop.how, ...(book ? [...book.nut, book.ben, book.good, ...book.pr.map(([k, n]) => SYM[k].t + " " + n)] : [])]
+      const fl = crop.flower;
+      const text = [title, crop.name, crop.botanical, crop.family, crop.summary, crop.how, ...(fl ? [fl.type, fl.color, fl.scent, fl.bloom] : []), ...(book ? [...book.nut, book.ben, book.good, ...book.pr.map(([k, n]) => SYM[k].t + " " + n)] : [])]
         .join(" ")
         .toLowerCase();
       return text.includes(needle);
     });
-  }, [q, filter, stars, location.zone]);
+  }, [q, filter, group, stars, location.zone]);
 
   const byLetter = useMemo(() => {
     const groups = new Map<string, Entry[]>();
@@ -234,7 +270,7 @@ export default function PlantsSection() {
   return (
     <section className="view encyclopedia">
       <div>
-        <div className="kicker">Fruits · vegetables · herbs, A to Z</div>
+        <div className="kicker">Fruits · vegetables · herbs · flowers, A to Z</div>
         <h2>Plant encyclopedia</h2>
       </div>
       <p className="lead">
@@ -255,12 +291,21 @@ export default function PlantsSection() {
             </button>
           ))}
         </div>
+        {filter === "flower" && (
+          <div className="chips" role="group" aria-label="Kind of flower">
+            {(["all", ...FLOWER_GROUPS] as const).map((key) => (
+              <button key={key} className="chip" type="button" aria-pressed={group === key} onClick={() => setGroup(key)}>
+                {key === "all" ? "All flowers" : FLOWER_GROUP_LABEL[key]}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
       <p className="pmeta noprint" aria-live="polite">
         {shown.length} of {ENTRIES.length} plants
         {filter === "star" && shown.length === 0 ? " · star plants to build your garden list" : ""}
       </p>
-      <Reveal className="entries" items=".entry" refresh={`${filter}|${q}`}>
+      <Reveal className="entries" items=".entry" refresh={`${filter}|${group}|${q}`}>
         {[...byLetter.entries()].map(([letter, entries]) => (
           <section key={letter} className="letter-group" aria-labelledby={`letter-${letter}`}>
             <h3 className="letter" id={`letter-${letter}`}>{letter}</h3>

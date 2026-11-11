@@ -4,7 +4,7 @@
 import { useId, useMemo, useState } from "react";
 import { BED_TYPES, MAX_SQUARE_ACRES, OBSTACLES, squareYardForAcres, yardAcres, type Bed, type BedType, type Garden, type Obstacle, type Yard } from "@/frontend/planner/model";
 import type { CropsById } from "@/frontend/planner/analysis";
-import { suitsZone, type Crop } from "@/shared/crop";
+import { FLOWER_GROUPS, FLOWER_GROUP_LABEL, isGardenFlower, suitsZone, type Crop } from "@/shared/crop";
 import { suggestionsFor } from "@/shared/planting";
 import { zoneNumber } from "@/shared/zones";
 
@@ -50,15 +50,20 @@ type BedEditorProps = {
 export function BedEditor({ bed, crops, cropsById, zone, month, onChange, onDelete, onClose, onAddNewCrop }: BedEditorProps) {
   const nameId = useId();
   const pickId = useId();
-  // Group the crop list: plant now in this zone, grows in this zone, everything else.
+  // Group the crop list: plant now in this zone, grows in this zone, everything else,
+  // then the named roses, peonies and camellias in their own groups so they don't bury the food crops.
   const groups = useMemo(() => {
     const now = suggestionsFor(zone, month, crops).map((s) => s.crop);
     const nowIds = new Set(now.map((c) => c.id));
     const zn = zoneNumber(zone);
     const byName = (a: Crop, b: Crop) => a.name.localeCompare(b.name);
-    const fits = crops.filter((c) => !nowIds.has(c.id) && suitsZone(c, zn)).sort(byName);
-    const other = crops.filter((c) => !nowIds.has(c.id) && !suitsZone(c, zn)).sort(byName);
+    const food = crops.filter((c) => !isGardenFlower(c) && !nowIds.has(c.id));
+    const fits = food.filter((c) => suitsZone(c, zn)).sort(byName);
+    const other = food.filter((c) => !suitsZone(c, zn)).sort(byName);
     const list: [string, Crop[]][] = [["Plant this month in zone " + zone, now.sort(byName)], [`Grows in zone ${zone}`, fits], ["Other zones", other]];
+    for (const group of FLOWER_GROUPS) {
+      list.push([FLOWER_GROUP_LABEL[group], crops.filter((c) => c.flower?.group === group).sort(byName)]);
+    }
     return list;
   }, [crops, zone, month]);
 

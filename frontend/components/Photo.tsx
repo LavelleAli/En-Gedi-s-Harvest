@@ -20,7 +20,14 @@ export function Credit({ photo }: { photo: PhotoInfo | null }) {
   if (!photo) return null;
   return (
     <span className="credit">
-      Photo: <a href={photo.source} target="_blank" rel="noopener noreferrer">{photo.artist}</a>,{" "}
+      Photo:{" "}
+      {/* Our own photos have no source page to link to. */}
+      {photo.source ? (
+        <a href={photo.source} target="_blank" rel="noopener noreferrer">{photo.artist}</a>
+      ) : (
+        photo.artist
+      )}
+      ,{" "}
       {photo.licenseUrl ? (
         <a href={photo.licenseUrl} target="_blank" rel="noopener noreferrer">{photo.license}</a>
       ) : (

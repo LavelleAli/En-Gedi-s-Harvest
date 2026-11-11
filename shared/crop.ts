@@ -29,6 +29,9 @@ export const METHOD_LABEL: Record<Method, string> = {
   division: "Plant divisions or offsets",
 };
 export const BEDS = ["raised", "in-ground", "either"] as const;
+export const FLOWER_GROUPS = ["rose", "peony", "camellia", "companion"] as const;
+export type FlowerGroup = (typeof FLOWER_GROUPS)[number];
+export const FLOWER_GROUP_LABEL: Record<FlowerGroup, string> = { rose: "Roses", peony: "Peonies", camellia: "Camellias", companion: "Flowering companions" };
 export const ORIGINS = ["stock", "research", "custom"] as const;
 
 const weeks = z.tuple([z.number().min(-30).max(30), z.number().min(-30).max(30)]);
@@ -73,12 +76,33 @@ export const CropSchema = z.object({
   book: z.string().max(80).optional(), // the plant's name in the encyclopedia, when it has a full entry
   zoneNote: z.string().max(320).optional(), // researched plants: a note for the zone that was asked about
   sources: z.array(SourceSchema).max(8).default([]),
+  // Garden flowers (roses, peonies, camellias and their companions) keep their nursery details as written.
+  flower: z
+    .object({
+      group: z.enum(FLOWER_GROUPS),
+      type: z.string().max(120).default(""),
+      height: z.string().max(120).default(""),
+      color: z.string().max(160).default(""),
+      sun: z.string().max(160).default(""),
+      scent: z.string().max(120).default(""),
+      space: z.string().max(160).default(""),
+      bloom: z.string().max(160).default(""),
+      disease: z.string().max(200).default(""),
+      companions: z.string().max(160).default(""),
+      note: z.string().max(320).default(""),
+    })
+    .optional(),
 });
 
 /** One crop record, as validated by CropSchema (defaults filled in). */
 export type Crop = z.infer<typeof CropSchema>;
 /** What name matching needs from a crop: stock crops, library results and form drafts all have these. */
 export type CropRef = Pick<Crop, "id" | "name"> & { book?: string };
+
+/** Named garden flowers (each rose or peony cultivar) are listed on their own, not in the month-by-month planting lists. */
+export function isGardenFlower(crop: Pick<Crop, "flower">): boolean {
+  return crop.flower !== undefined;
+}
 export type Source = z.infer<typeof SourceSchema>;
 
 export const cropId = (name: string): string => slug(name).slice(0, 60);

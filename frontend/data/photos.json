@@ -1,1 +1,961 @@
-{}
+{
+  "plant-a-shropshire-lad": {
+    "file": "/photos/plant-a-shropshire-lad.jpg",
+    "title": "A Shropshire Lad",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-alchemist": {
+    "file": "/photos/plant-alchemist.jpg",
+    "title": "Alchemist",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-alister-stella-gray": {
+    "file": "/photos/plant-alister-stella-gray.jpg",
+    "title": "Alister Stella Gray",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-amethyst-babylon": {
+    "file": "/photos/plant-amethyst-babylon.jpg",
+    "title": "Amethyst Babylon",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-at-last": {
+    "file": "/photos/plant-at-last.jpg",
+    "title": "At Last",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-ballerina": {
+    "file": "/photos/plant-ballerina.jpg",
+    "title": "Ballerina",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-basil": {
+    "file": "/photos/plant-basil.jpg",
+    "title": "IMG_8243",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-bathsheba": {
+    "file": "/photos/plant-bathsheba.jpg",
+    "title": "Bathsheba",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-beet": {
+    "file": "/photos/plant-beet.jpg",
+    "title": "IMG_8245",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-blue-dress": {
+    "file": "/photos/plant-blue-dress.jpg",
+    "title": "Blue Dress",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-blue-moonstone": {
+    "file": "/photos/plant-blue-moonstone.jpg",
+    "title": "Blue Moonstone",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-boscobel": {
+    "file": "/photos/plant-boscobel.jpg",
+    "title": "Boscobel",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-bouquet-parfait": {
+    "file": "/photos/plant-bouquet-parfait.jpg",
+    "title": "Bouquet Parfait",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-broccoli": {
+    "file": "/photos/plant-broccoli.jpg",
+    "title": "IMG_8256",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-buff-beauty": {
+    "file": "/photos/plant-buff-beauty.jpg",
+    "title": "Buff Beauty",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-cabbage": {
+    "file": "/photos/plant-cabbage.jpg",
+    "title": "IMG_8262",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-carrot": {
+    "file": "/photos/plant-carrot.jpg",
+    "title": "IMG_8258",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-cathedral-bells": {
+    "file": "/photos/plant-cathedral-bells.jpg",
+    "title": "Cathedral Bells",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-cecile-brunner": {
+    "file": "/photos/plant-cecile-brunner.jpg",
+    "title": "Cecile Brunner",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-chandos-beauty": {
+    "file": "/photos/plant-chandos-beauty.jpg",
+    "title": "Chandos Beauty",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-chansonette-s-blush": {
+    "file": "/photos/plant-chansonette-s-blush.jpg",
+    "title": "Chansonette’s Blush",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-chevy-chase": {
+    "file": "/photos/plant-chevy-chase.jpg",
+    "title": "Chevy Chase",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-chicago-peace": {
+    "file": "/photos/plant-chicago-peace.jpg",
+    "title": "Chicago Peace",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-collards": {
+    "file": "/photos/plant-collards.jpg",
+    "title": "IMG_8280",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-commerce-peace": {
+    "file": "/photos/plant-commerce-peace.jpg",
+    "title": "Commerce Peace",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-cosmic-clouds": {
+    "file": "/photos/plant-cosmic-clouds.jpg",
+    "title": "Cosmic Clouds",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-courage": {
+    "file": "/photos/plant-courage.jpg",
+    "title": "Courage",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-cucumber": {
+    "file": "/photos/plant-cucumber.jpg",
+    "title": "IMG_8268",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-desdemona": {
+    "file": "/photos/plant-desdemona.jpg",
+    "title": "Desdemona",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-dill": {
+    "file": "/photos/plant-dill.jpg",
+    "title": "IMG_8264",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-dolly-parton": {
+    "file": "/photos/plant-dolly-parton.jpg",
+    "title": "Dolly Parton",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-don-juan": {
+    "file": "/photos/plant-don-juan.jpg",
+    "title": "Don Juan",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-earth-angel": {
+    "file": "/photos/plant-earth-angel.jpg",
+    "title": "Earth Angel",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-ebb-tide": {
+    "file": "/photos/plant-ebb-tide.jpg",
+    "title": "Ebb Tide",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-eden-climber-pink": {
+    "file": "/photos/plant-eden-climber-pink.jpg",
+    "title": "Eden Climber — Pink",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-eggplant": {
+    "file": "/photos/plant-eggplant.jpg",
+    "title": "IMG_8266",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-emerald-isle": {
+    "file": "/photos/plant-emerald-isle.jpg",
+    "title": "Emerald Isle",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-english-perfume": {
+    "file": "/photos/plant-english-perfume.jpg",
+    "title": "English Perfume",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-erinnerung-an-brod-souvenir-de-brod": {
+    "file": "/photos/plant-erinnerung-an-brod-souvenir-de-brod.jpg",
+    "title": "Erinnerung an Brod (Souvenir de Brod)",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-evelyn": {
+    "file": "/photos/plant-evelyn.jpg",
+    "title": "Evelyn",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-everest": {
+    "file": "/photos/plant-everest.jpg",
+    "title": "Everest",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-felicia": {
+    "file": "/photos/plant-felicia.jpg",
+    "title": "Felicia",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-felix-supreme": {
+    "file": "/photos/plant-felix-supreme.jpg",
+    "title": "Felix Supreme",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-francis-e-lester": {
+    "file": "/photos/plant-francis-e-lester.jpg",
+    "title": "Francis E. Lester",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-ghislaine-de-f-ligonde": {
+    "file": "/photos/plant-ghislaine-de-f-ligonde.jpg",
+    "title": "Ghislaine de Féligonde",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-green-beans": {
+    "file": "/photos/plant-green-beans.jpg",
+    "title": "IMG_8239",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-hana-bonbori": {
+    "file": "/photos/plant-hana-bonbori.jpg",
+    "title": "Hana Bonbori",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-hansa": {
+    "file": "/photos/plant-hansa.jpg",
+    "title": "Hansa",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-heavenly-pink": {
+    "file": "/photos/plant-heavenly-pink.jpg",
+    "title": "Heavenly Pink",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-henry-sass": {
+    "file": "/photos/plant-henry-sass.jpg",
+    "title": "Henry Sass",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-iceberg": {
+    "file": "/photos/plant-iceberg.jpg",
+    "title": "Iceberg",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-it-s-a-breeze": {
+    "file": "/photos/plant-it-s-a-breeze.jpg",
+    "title": "It's a Breeze",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-jasmina": {
+    "file": "/photos/plant-jasmina.jpg",
+    "title": "Jasmina",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-jude-the-obscure": {
+    "file": "/photos/plant-jude-the-obscure.jpg",
+    "title": "Jude the Obscure",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-juliet": {
+    "file": "/photos/plant-juliet.jpg",
+    "title": "Juliet",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-jump-for-joy": {
+    "file": "/photos/plant-jump-for-joy.jpg",
+    "title": "Jump for Joy",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-kale": {
+    "file": "/photos/plant-kale.jpg",
+    "title": "IMG_8246",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-kensington-gardens": {
+    "file": "/photos/plant-kensington-gardens.jpg",
+    "title": "Kensington Gardens",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-kew-rambler": {
+    "file": "/photos/plant-kew-rambler.jpg",
+    "title": "Kew Rambler",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-kimberley": {
+    "file": "/photos/plant-kimberley.jpg",
+    "title": "Kimberley",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-kwanzan-cherry": {
+    "file": "/photos/plant-kwanzan-cherry.jpg",
+    "title": "Kwanzan cherry",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-lady-banks": {
+    "file": "/photos/plant-lady-banks.jpg",
+    "title": "Lady Banks",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-lady-capri": {
+    "file": "/photos/plant-lady-capri.jpg",
+    "title": "Lady Capri",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-lady-of-shalott": {
+    "file": "/photos/plant-lady-of-shalott.jpg",
+    "title": "Lady of Shalott",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-lamb-s-ear": {
+    "file": "/photos/plant-lamb-s-ear.jpg",
+    "title": "Lamb's ear",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-lavender-lassie": {
+    "file": "/photos/plant-lavender-lassie.jpg",
+    "title": "Lavender Lassie",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-lavender-peony": {
+    "file": "/photos/plant-lavender-peony.jpg",
+    "title": "Lavender peony",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-lettuce": {
+    "file": "/photos/plant-lettuce.jpg",
+    "title": "IMG_8277",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-leverkusen": {
+    "file": "/photos/plant-leverkusen.jpg",
+    "title": "Leverkusen",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-lil-kim-rose-of-sharon": {
+    "file": "/photos/plant-lil-kim-rose-of-sharon.jpg",
+    "title": "Lil' Kim Rose of Sharon",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-love-s-light": {
+    "file": "/photos/plant-love-s-light.jpg",
+    "title": "Love's Light",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-madame-anisette": {
+    "file": "/photos/plant-madame-anisette.jpg",
+    "title": "Madame Anisette",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-magnoliaeflora": {
+    "file": "/photos/plant-magnoliaeflora.jpg",
+    "title": "Magnoliaeflora",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-maiden-s-blush": {
+    "file": "/photos/plant-maiden-s-blush.jpg",
+    "title": "Maiden's Blush",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-malvern-hills": {
+    "file": "/photos/plant-malvern-hills.jpg",
+    "title": "Malvern Hills",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-minerva": {
+    "file": "/photos/plant-minerva.jpg",
+    "title": "Minerva",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-mister-lincoln": {
+    "file": "/photos/plant-mister-lincoln.jpg",
+    "title": "Mister Lincoln",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-nelson-mandela": {
+    "file": "/photos/plant-nelson-mandela.jpg",
+    "title": "Nelson Mandela",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-new-dawn": {
+    "file": "/photos/plant-new-dawn.jpg",
+    "title": "New Dawn",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-october-magic-carpet": {
+    "file": "/photos/plant-october-magic-carpet.jpg",
+    "title": "October Magic Carpet",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-october-magic-white-shi-shi": {
+    "file": "/photos/plant-october-magic-white-shi-shi.jpg",
+    "title": "October Magic White Shi-Shi",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-olivia-rose-austin": {
+    "file": "/photos/plant-olivia-rose-austin.jpg",
+    "title": "Olivia Rose Austin",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-onion-incl-green-and-walking-onions": {
+    "file": "/photos/plant-onion-incl-green-and-walking-onions.jpg",
+    "title": "IMG_8270",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-outrageous": {
+    "file": "/photos/plant-outrageous.jpg",
+    "title": "Outrageous",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-parsley": {
+    "file": "/photos/plant-parsley.jpg",
+    "title": "IMG_8279",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-pashmina": {
+    "file": "/photos/plant-pashmina.jpg",
+    "title": "Pashmina",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-patricia-jean": {
+    "file": "/photos/plant-patricia-jean.jpg",
+    "title": "Patricia Jean",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-paul-s-himalayan-musk": {
+    "file": "/photos/plant-paul-s-himalayan-musk.jpg",
+    "title": "Paul's Himalayan Musk",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-pepper": {
+    "file": "/photos/plant-pepper.jpg",
+    "title": "IMG_8242",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-peppermint-party": {
+    "file": "/photos/plant-peppermint-party.jpg",
+    "title": "Peppermint Party",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-perfume-breeze": {
+    "file": "/photos/plant-perfume-breeze.jpg",
+    "title": "Perfume Breeze",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-pink-parade": {
+    "file": "/photos/plant-pink-parade.jpg",
+    "title": "Pink Parade",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-pinky-apricot-honey": {
+    "file": "/photos/plant-pinky-apricot-honey.jpg",
+    "title": "Pinky Apricot Honey",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-poet-s-wife": {
+    "file": "/photos/plant-poet-s-wife.jpg",
+    "title": "Poet's Wife",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-port-sunlight": {
+    "file": "/photos/plant-port-sunlight.jpg",
+    "title": "Port Sunlight",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-poseidon-novalis": {
+    "file": "/photos/plant-poseidon-novalis.jpg",
+    "title": "Poseidon (Novalis)",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-princess-alexandra-of-kent": {
+    "file": "/photos/plant-princess-alexandra-of-kent.jpg",
+    "title": "Princess Alexandra of Kent",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-princess-charlene-de-monaco": {
+    "file": "/photos/plant-princess-charlene-de-monaco.jpg",
+    "title": "Princess Charlene de Monaco",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-queen-of-sweden": {
+    "file": "/photos/plant-queen-of-sweden.jpg",
+    "title": "Queen of Sweden",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-radish": {
+    "file": "/photos/plant-radish.jpg",
+    "title": "IMG_8274",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-rambling-rosie": {
+    "file": "/photos/plant-rambling-rosie.jpg",
+    "title": "Rambling Rosie",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-raubritter": {
+    "file": "/photos/plant-raubritter.jpg",
+    "title": "Raubritter",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-rhapsody-in-blue": {
+    "file": "/photos/plant-rhapsody-in-blue.jpg",
+    "title": "Rhapsody in Blue",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-royal-bonica": {
+    "file": "/photos/plant-royal-bonica.jpg",
+    "title": "Royal Bonica",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-royal-jubilee": {
+    "file": "/photos/plant-royal-jubilee.jpg",
+    "title": "Royal Jubilee",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-sabrina-meiptorius": {
+    "file": "/photos/plant-sabrina-meiptorius.jpg",
+    "title": "Sabrina (Meiptorius)",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-sage": {
+    "file": "/photos/plant-sage.jpg",
+    "title": "IMG_8240",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-scarborough-fair": {
+    "file": "/photos/plant-scarborough-fair.jpg",
+    "title": "Scarborough Fair",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-snap-pea": {
+    "file": "/photos/plant-snap-pea.jpg",
+    "title": "IMG_8244",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-snow-goose": {
+    "file": "/photos/plant-snow-goose.jpg",
+    "title": "Snow Goose",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-spinach": {
+    "file": "/photos/plant-spinach.jpg",
+    "title": "IMG_8257",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-spirit-of-freedom": {
+    "file": "/photos/plant-spirit-of-freedom.jpg",
+    "title": "Spirit of Freedom",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-sultry-night": {
+    "file": "/photos/plant-sultry-night.jpg",
+    "title": "Sultry Night",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-summer-song": {
+    "file": "/photos/plant-summer-song.jpg",
+    "title": "Summer Song",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-summer-squash-and-zucchini": {
+    "file": "/photos/plant-summer-squash-and-zucchini.jpg",
+    "title": "IMG_8267",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-super-excelsa": {
+    "file": "/photos/plant-super-excelsa.jpg",
+    "title": "Super Excelsa",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-sweet-alyssum": {
+    "file": "/photos/plant-sweet-alyssum.jpg",
+    "title": "Sweet alyssum",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-sweet-corn": {
+    "file": "/photos/plant-sweet-corn.jpg",
+    "title": "IMG_8252",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-sweet-love": {
+    "file": "/photos/plant-sweet-love.jpg",
+    "title": "Sweet Love",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-teasing-georgia": {
+    "file": "/photos/plant-teasing-georgia.jpg",
+    "title": "Teasing Georgia",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-the-albrighton-rambler": {
+    "file": "/photos/plant-the-albrighton-rambler.jpg",
+    "title": "The Albrighton Rambler",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-the-fairy": {
+    "file": "/photos/plant-the-fairy.jpg",
+    "title": "The Fairy",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-the-generous-gardener": {
+    "file": "/photos/plant-the-generous-gardener.jpg",
+    "title": "The Generous Gardener",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-the-lady-of-the-lake": {
+    "file": "/photos/plant-the-lady-of-the-lake.jpg",
+    "title": "The Lady of the Lake",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-the-lark-ascending": {
+    "file": "/photos/plant-the-lark-ascending.jpg",
+    "title": "The Lark Ascending",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-the-mill-on-the-floss": {
+    "file": "/photos/plant-the-mill-on-the-floss.jpg",
+    "title": "The Mill on the Floss",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-tomato": {
+    "file": "/photos/plant-tomato.jpg",
+    "title": "IMG_8238",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-true-inspiration": {
+    "file": "/photos/plant-true-inspiration.jpg",
+    "title": "True Inspiration",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-true-spirit": {
+    "file": "/photos/plant-true-spirit.jpg",
+    "title": "True Spirit",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-turnips": {
+    "file": "/photos/plant-turnips.jpg",
+    "title": "IMG_8276",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-twilight-zone": {
+    "file": "/photos/plant-twilight-zone.jpg",
+    "title": "Twilight Zone",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-veilchenblau": {
+    "file": "/photos/plant-veilchenblau.jpg",
+    "title": "Veilchenblau",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-waterloo": {
+    "file": "/photos/plant-waterloo.jpg",
+    "title": "Waterloo",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-watermelon": {
+    "file": "/photos/plant-watermelon.jpg",
+    "title": "IMG_8271",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-winter-squash-and-pumpkin": {
+    "file": "/photos/plant-winter-squash-and-pumpkin.jpg",
+    "title": "IMG_8273",
+    "source": "",
+    "artist": "En Gedi's Harvest (Valley Greene seed packet)",
+    "license": "used with permission"
+  },
+  "plant-wollerton-old-hall": {
+    "file": "/photos/plant-wollerton-old-hall.jpg",
+    "title": "Wollerton Old Hall",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  },
+  "plant-z-phirine-drouhin": {
+    "file": "/photos/plant-z-phirine-drouhin.jpg",
+    "title": "Zéphirine Drouhin",
+    "source": "",
+    "artist": "En Gedi's Harvest rose garden list (nursery photo)",
+    "license": "used for private reference"
+  }
+}

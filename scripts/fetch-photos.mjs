@@ -112,6 +112,11 @@ async function main() {
   let got = 0, skipped = 0, missed = [];
 
   for (const slot of slots) {
+    // Our own photos (no Commons source link) are never replaced, even with --force.
+    if (photos[slot] && !photos[slot].source && existsSync(path.join(root, "public", photos[slot].file))) {
+      skipped++;
+      continue;
+    }
     if (!force && !only.length && photos[slot] && existsSync(path.join(root, "public", photos[slot].file))) {
       skipped++;
       continue;

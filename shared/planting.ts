@@ -1,6 +1,6 @@
 // Planting windows and suggestions for a zone. Windows come from each crop's weeks-from-frost
 // numbers and the zone's average frost dates, so the same crop record works everywhere.
-import { suitsZone, zoneRangeText, METHOD_LABEL, type Crop } from "@/shared/crop";
+import { isGardenFlower, suitsZone, zoneRangeText, METHOD_LABEL, type Crop } from "@/shared/crop";
 import { formatDay, frostDays, frostFreeDays, isFrostFree, zoneNumber } from "@/shared/zones";
 
 // First day of each month (non-leap year), plus the day after Dec 31.
@@ -58,7 +58,8 @@ export function suggestionsFor(zone: string, month: number, crops: readonly Crop
   const end = MONTH_START[month + 1] - 1;
   const results: Suggestion[] = [];
   for (const crop of crops) {
-    if (!suitsZone(crop, zoneNum)) continue;
+    // Named rose and peony cultivars would crowd out the food crops; they have their own encyclopedia filter.
+    if (isGardenFlower(crop) || !suitsZone(crop, zoneNum)) continue;
     const window = plantingWindows(crop, zone).find((w) => overlaps(w, start, end));
     if (!window) continue;
     results.push({ crop, window, method: METHOD_LABEL[crop.method], fit: seasonFit(crop, zone) });

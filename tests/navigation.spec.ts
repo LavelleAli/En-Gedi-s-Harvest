@@ -96,7 +96,7 @@ test("a plant's problem link opens the matching plant doctor card", async ({ pag
 test("the encyclopedia lists every plant A to Z under letter headings", async ({ page }) => {
   await page.goto("/plants/");
   const names = await page.locator(".entry .headword").allTextContents();
-  expect(names.length).toBe(57);
+  expect(names.length).toBe(202); // 57 food crops + 145 roses, peonies, camellias and companions
   expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
   await expect(page.getByRole("heading", { level: 3, name: "T", exact: true })).toBeVisible();
   await page.getByRole("navigation", { name: "Jump to a letter" }).getByRole("link", { name: "T", exact: true }).click();
@@ -106,7 +106,19 @@ test("the encyclopedia lists every plant A to Z under letter headings", async ({
 test("search filters the encyclopedia", async ({ page }) => {
   await page.goto("/plants/");
   await page.getByRole("searchbox", { name: "Search plants" }).fill("vitamin a");
-  await expect(page.getByText(/of 57 plants/)).not.toHaveText("57 of 57 plants");
+  // The count line reads "N of M plants"; a search should leave fewer than all of them.
+  const count = page.getByText(/^\d+ of \d+ plants/);
+  await expect(count).toHaveText(/^(\d+) of (?!\1 )\d+ plants/);
+});
+
+test("the flowers filter narrows to roses, then peonies", async ({ page }) => {
+  await page.goto("/plants/");
+  await page.getByRole("button", { name: "Roses & flowers" }).click();
+  await expect(page.getByText(/^145 of 202 plants/)).toBeVisible();
+  await page.getByRole("button", { name: "Peonies" }).click();
+  await expect(page.getByText(/^27 of 202 plants/)).toBeVisible();
+  await expect(page.locator("#plant-red-charm")).toBeVisible();
+  await expect(page.locator("#plant-bathsheba")).toHaveCount(0);
 });
 
 test("gear checklist remembers ticks after a reload", async ({ page }) => {

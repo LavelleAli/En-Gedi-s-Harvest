@@ -29,7 +29,7 @@ export default function CreditsSection() {
               <img src={p.file} alt={p.title} loading="lazy" />
               <figcaption>
                 <span className="mono">{slot}</span>
-                <a href={p.source} target="_blank" rel="noopener noreferrer">{p.title}</a>
+                {p.source ? <a href={p.source} target="_blank" rel="noopener noreferrer">{p.title}</a> : <span>{p.title}</span>}
                 <span>{p.artist}</span>
                 <span>{p.licenseUrl ? <a href={p.licenseUrl} target="_blank" rel="noopener noreferrer">{p.license}</a> : p.license}</span>
               </figcaption>

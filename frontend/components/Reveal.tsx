@@ -36,7 +36,10 @@ export default function Reveal({ as: Tag = "div", items = ":scope > *", refresh,
       ScrollTrigger.batch(below, {
         start: "top 95%",
         once: true,
-        onEnter: (batch) => gsap.to(batch, { opacity: 1, y: 0, duration: FADE, ease: EASE, stagger: 0.07, clearProps: "transform" }),
+        // Jumping far down the page enters many items at once; cap the whole stagger at half a second
+        // so the item you jumped to isn't left waiting behind all the ones you skipped.
+        onEnter: (batch) =>
+          gsap.to(batch, { opacity: 1, y: 0, duration: FADE, ease: EASE, stagger: Math.min(0.07, 0.5 / batch.length), clearProps: "transform" }),
       });
     },
     { scope: ref, dependencies: [refresh], revertOnUpdate: true },
