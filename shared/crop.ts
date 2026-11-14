@@ -144,6 +144,7 @@ const ALIASES: Record<string, string> = {
   chard: "swiss-chard", "silverbeet": "swiss-chard",
   pumpkin: "winter-squash", "butternut squash": "winter-squash", "winter squash": "winter-squash",
   melon: "watermelon",
+  muskmelon: "cantaloupe", rockmelon: "cantaloupe", cantalope: "cantaloupe",
   coriander: "cilantro",
   "bell pepper": "pepper", "chili pepper": "pepper", "hot pepper": "pepper", "sweet pepper": "pepper", chili: "pepper",
   "cherry tomato": "tomato",
@@ -166,7 +167,7 @@ const GROUPS: Record<string, string[]> = {
   "onion family": ["onion", "garlic", "chives", "leek"],
   legume: ["green-beans", "snap-pea", "southern-peas"],
   nightshade: ["tomato", "pepper", "eggplant", "potato"],
-  cucurbit: ["summer-squash", "cucumber", "winter-squash", "watermelon"],
+  cucurbit: ["summer-squash", "cucumber", "winter-squash", "watermelon", "cantaloupe"],
 };
 
 // Turns a crop id or a plain plant name into the ids of matching crops (possibly several for a family name).

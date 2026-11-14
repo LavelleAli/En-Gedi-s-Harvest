@@ -70,25 +70,26 @@ function base(group: FlowerGroup, name: string, d: Details): Record<string, unkn
   return COMPANIONS[name];
 }
 
-// The spring bulbs: planted in fall once the soil cools (late October into December here), bloom the next spring.
-// Windows are weeks from the first fall frost. Tulips want a longer winter than Georgia gives, so they go in last.
+// The spring bulbs: planted in fall, October through late December in most of Georgia (UGA Extension B918),
+// and bloom the next spring. Windows are weeks from the first fall frost. Depths and spacing follow B918;
+// zones, heights and care follow the NC State Extension plant pages. Tulips go in last, after chilling.
 const BULB_BASE = { family: "Asparagaceae", habit: "clump", sunHours: 6, shadeOk: true, waterIn: 0.5, rootIn: 10, method: "bulbs", spring: null, bed: "either", firstHarvest: "Blooms the next spring" };
 const BULBS: Record<string, Record<string, unknown>> = {
   "Grape hyacinth": {
-    ...BULB_BASE, botanical: "Muscari armeniacum", zones: [4, 8], heightFt: 0.7, spacingIn: 3, rootIn: 6, depthIn: 3, fall: [-3, 6],
-    how: "Plant in fall in drifts, 3 in deep and 3 in apart, in well-drained soil. Leaves come up in fall and stay through winter; let them yellow before you cut them back. It spreads on its own year after year.",
+    ...BULB_BASE, botanical: "Muscari armeniacum", zones: [4, 8], heightFt: 0.75, spacingIn: 3, rootIn: 6, depthIn: 3, fall: [-3, 6],
+    how: "Plant in fall in drifts, 3 in deep and 3 in apart, in well-drained soil. Leaves come up in fall and stay through winter; let them yellow before you cut them back. It naturalizes quickly; lift and divide crowded clumps every 4–5 years.",
   },
   Hyacinth: {
-    ...BULB_BASE, botanical: "Hyacinthus orientalis", zones: [4, 8], heightFt: 1, spacingIn: 6, depthIn: 6, fall: [-2, 6],
-    how: "Plant in fall, 6 in deep and 6 in apart, in well-drained soil; wear gloves, since the bulbs can itch. Leave the leaves until they yellow. Flowers get smaller after the first year in the South, so many gardeners add fresh bulbs every fall.",
+    ...BULB_BASE, botanical: "Hyacinthus orientalis", zones: [4, 8], heightFt: 1, spacingIn: 5, depthIn: 4, fall: [-3, 6],
+    how: "Plant in fall, 4 in deep and 5 in apart, in rich, well-drained soil; wear gloves, since the bulbs can irritate skin. Cut off spent spikes and leave the leaves until they yellow. The flowers get smaller each year, so many gardeners add fresh bulbs every fall.",
   },
   Daffodil: {
-    ...BULB_BASE, botanical: "Narcissus (hybrids)", family: "Amaryllidaceae", zones: [3, 9], heightFt: 1.5, spacingIn: 6, depthIn: 6, fall: [-3, 6],
-    how: "Plant in fall, 6 in deep (about three times the bulb's height) and 6 in apart, in well-drained soil. Let the leaves yellow for about six weeks after bloom before cutting them. Deer and voles leave them alone, and they come back for years.",
+    ...BULB_BASE, botanical: "Narcissus (hybrids)", family: "Amaryllidaceae", zones: [4, 8], heightFt: 2, spacingIn: 5, depthIn: 6, fall: [-3, 6],
+    how: "Plant in fall, about 6 in deep (three times the bulb's height) and 3–6 in apart, in well-drained soil. Snap off spent flowers, but leave the leaves until they yellow. Deer and rabbits leave them alone, and they come back and spread for years.",
   },
   Tulip: {
-    ...BULB_BASE, botanical: "Tulipa (hybrids)", family: "Liliaceae", zones: [3, 8], heightFt: 2, spacingIn: 5, depthIn: 7, fall: [2, 8],
-    how: "Chill the bulbs in the fridge (away from fruit) for 8–10 weeks, then plant in December, 6–8 in deep and 5 in apart, in well-drained soil. In Georgia most tulips bloom well only the first spring, so treat them as annuals.",
+    ...BULB_BASE, botanical: "Tulipa (hybrids)", family: "Liliaceae", zones: [3, 8], heightFt: 2, spacingIn: 5, depthIn: 6, fall: [2, 6],
+    how: "Unless the bulbs were sold pre-cooled, chill them in the fridge (40–50°F, away from fruit) for 12–16 weeks, then plant by late December, 4–6 in deep and 4–6 in apart, in well-drained soil in full sun. Most tulips decline after the first spring in Georgia.",
   },
 };
 
@@ -288,8 +289,8 @@ export const FLOWERS: Crop[] = [
   flower("peony", "The Best Inkstone (Mo Run Jue Lun)", { type: "Tree peony (Paeonia suffruticosa); double", height: "4–5 ft", color: "Deep crimson / dark red", sun: "Full sun to partial shade", scent: "Delicate fragrance", bloom: "Mid to late spring; midseason flowering", disease: "Not rated by source" }, { zones: [4, 7], sources: [{ title: "Breck's: The Best Inkstone", url: "https://www.brecks.com/products/the-best-inkstone-tree-peony" }] }),
   flower("peony", "Vivid Rose", { type: "Lactiflora; full double", height: "Medium (Hollingsworth)", color: "Bright medium pink", sun: "Full sun", scent: "Fragrant", space: "Strong stems; support large double blooms", bloom: "Late midseason–late season", disease: "Not rated by Hollingsworth" }),
   flower("peony", "Walter Faxon", { type: "Lactiflora; full double", height: "30–32 in (Old House Gardens); medium", color: "Shell pink; paler outer petals; fades in sun", sun: "Full sun", scent: "Fragrant; Best Fragrant", space: "Large bush; good support needed in rain", bloom: "Late midseason–late season (Hollingsworth)", disease: "No formal resistance rating" }),
-  flower("bulb", "Grape hyacinth", { type: "Spring bulb", height: "6–8 in", color: "Cobalt blue clusters", sun: "Full sun/part shade", scent: "Light grape scent", space: "3 in apart; spreads into drifts", bloom: "Early to mid spring", disease: "Few problems; rots in soggy soil", companions: "Daffodils + tulips + creeping thyme" }),
-  flower("bulb", "Hyacinth", { type: "Spring bulb", height: "8–12 in", color: "Blue, purple, pink, white", sun: "Full sun/part shade", scent: "Strong, sweet fragrance", space: "6 in apart", bloom: "Mid spring", disease: "Few problems; rots in soggy soil", companions: "Grape hyacinth + tulips + pansies" }),
-  flower("bulb", "Daffodil", { type: "Spring bulb", height: "12–20 in", color: "Yellow, white, orange, bicolors", sun: "Full sun/part shade", scent: "Light; some kinds fragrant", space: "6 in apart; clumps widen each year", bloom: "Late winter to mid spring", disease: "Few problems; deer and voles avoid them", companions: "Grape hyacinth + hellebores + roses" }),
-  flower("bulb", "Tulip", { type: "Spring bulb", height: "10–24 in", color: "Nearly every color but true blue", sun: "Full sun", scent: "Mostly none; a few light", space: "5 in apart", bloom: "Mid to late spring", disease: "Botrytis (tulip fire) in wet springs; squirrels dig the bulbs", companions: "Grape hyacinth + pansies + daffodils" }, { note: "Pre-chill 8–10 weeks and plant in December; usually an annual in Georgia." }),
+  flower("bulb", "Grape hyacinth", { type: "Spring bulb", height: "6–9 in", color: "Royal blue to violet clusters; some pink or white", sun: "Full sun/part shade", scent: "Slightly fragrant", space: "3 in apart; naturalizes into drifts", bloom: "Early to mid spring", disease: "Few problems; rots in soggy soil", companions: "Daffodils + tulips + creeping thyme" }, { sources: [{ title: "NC State Extension: Muscari armeniacum", url: "https://plants.ces.ncsu.edu/plants/muscari-armeniacum/" }, { title: "UGA Extension: Flowering Bulbs for Georgia Gardens (B918)", url: "https://fieldreport.caes.uga.edu/publications/B918/" }] }),
+  flower("bulb", "Hyacinth", { type: "Spring bulb", height: "8–12 in", color: "Blue, purple, pink, white", sun: "Full sun/part shade", scent: "Heavy, sweet fragrance", space: "5 in apart", bloom: "Mid spring", disease: "Bulb rot in poorly drained soil; bulbs can irritate skin", companions: "Grape hyacinth + tulips + pansies" }, { sources: [{ title: "NC State Extension: Hyacinthus orientalis", url: "https://plants.ces.ncsu.edu/plants/hyacinthus-orientalis/" }, { title: "UGA Extension: Flowering Bulbs for Georgia Gardens (B918)", url: "https://fieldreport.caes.uga.edu/publications/B918/" }] }),
+  flower("bulb", "Daffodil", { type: "Spring bulb", height: "6–24 in", color: "Yellow, white, orange, pink, bicolors", sun: "Full sun/part shade", scent: "Fragrant; strongest in some kinds", space: "3–6 in apart; clumps widen each year", bloom: "Late winter to mid spring", disease: "Few problems; deer and rabbits avoid them; bulbs are poisonous", companions: "Grape hyacinth + hellebores + roses" }, { sources: [{ title: "NC State Extension: Narcissus", url: "https://plants.ces.ncsu.edu/plants/narcissus/" }, { title: "UGA Extension: Flowering Bulbs for Georgia Gardens (B918)", url: "https://fieldreport.caes.uga.edu/publications/B918/" }] }),
+  flower("bulb", "Tulip", { type: "Spring bulb", height: "10–24 in (hybrids)", color: "Nearly every color but true blue", sun: "Full sun (6+ hours)", scent: "Mostly none", space: "4–6 in apart", bloom: "Mid to late spring", disease: "Gray mold (Botrytis) and viruses; squirrels, mice and voles dig the bulbs", companions: "Grape hyacinth + pansies + daffodils" }, { note: "Pre-chill 12–16 weeks unless sold pre-cooled; usually declines after the first year in Georgia.", sources: [{ title: "NC State Extension: Tulipa", url: "https://plants.ces.ncsu.edu/plants/tulipa/" }, { title: "UGA Extension: Flowering Bulbs for Georgia Gardens (B918)", url: "https://fieldreport.caes.uga.edu/publications/B918/" }] }),
 ];

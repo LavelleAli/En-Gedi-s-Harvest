@@ -58,7 +58,7 @@ const EntryCard = forwardRef<HTMLDivElement, EntryCardProps>(function EntryCard(
             </FactList>
           </>
         )}
-        {crop.flower && crop.sources.length > 0 && (
+        {crop.sources.length > 0 && (
           <>
             <h5>Sources</h5>
             <ul>

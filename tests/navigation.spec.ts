@@ -198,7 +198,7 @@ test("a plant's problem link opens the matching plant doctor card", async ({ pag
 test("the encyclopedia lists every plant A to Z under letter headings", async ({ page }) => {
   await page.goto("/plants/");
   const names = await page.locator(".entry .headword").allTextContents();
-  expect(names.length).toBe(207); // 57 food crops + 150 roses, peonies, camellias, spring bulbs and companions
+  expect(names.length).toBe(209); // 59 food crops + 150 roses, peonies, camellias, spring bulbs and companions
   expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })));
   await expect(page.getByRole("heading", { level: 3, name: "T", exact: true })).toBeVisible();
   await page.getByRole("navigation", { name: "Jump to a letter" }).getByRole("link", { name: "T", exact: true }).click();
@@ -266,17 +266,17 @@ test("the type dropdown narrows to flowers, then peonies, and combines with the 
   const type = page.getByLabel("Type of plant");
   await expect(type.locator("option", { hasText: "Peonies (27)" })).toHaveCount(1);
   await type.selectOption({ label: "All roses & flowers (150)" });
-  await expect(page.getByText(/^150 of 207 plants/)).toBeVisible();
+  await expect(page.getByText(/^150 of 209 plants/)).toBeVisible();
   await type.selectOption({ label: "Peonies (27)" });
-  await expect(page.getByText(/^27 of 207 plants/)).toBeVisible();
+  await expect(page.getByText(/^27 of 209 plants/)).toBeVisible();
   await expect(page.locator("#plant-red-charm")).toBeVisible();
   await expect(page.locator("#plant-bathsheba")).toHaveCount(0);
   // "Grows in zone 8a" narrows the peonies further: a few are only rated to zone 7.
   await page.getByRole("button", { name: /^Grows in zone/ }).click();
-  await expect(page.getByText(/^22 of 207 plants/)).toBeVisible();
+  await expect(page.getByText(/^22 of 209 plants/)).toBeVisible();
   await expect(page.locator("#plant-red-charm")).toHaveCount(0);
   await type.selectOption("all");
-  await expect(page.getByText(/^\d+ of 207 plants/)).not.toHaveText(/^207 of/);
+  await expect(page.getByText(/^\d+ of 209 plants/)).not.toHaveText(/^209 of/);
 });
 
 test("gear checklist remembers ticks after a reload", async ({ page }) => {
