@@ -1,0 +1,70 @@
+import photos from "@/frontend/data/photos.json";
+import { DRAW } from "@/frontend/data/art";
+
+/** A downloaded photo and its credit (written by scripts/fetch-photos.mjs). */
+export type PhotoInfo = { file: string; title: string; source: string; artist: string; license: string; licenseUrl?: string };
+const PHOTOS = photos as Record<string, PhotoInfo | undefined>;
+
+export function getPhoto(slot: string): PhotoInfo | null {
+  return PHOTOS[slot] || null;
+}
+
+// Drawn illustration, used wherever no photo has been downloaded yet.
+export function Art({ name, className }: { name: string; className?: string }) {
+  const draw = (DRAW as Record<string, (() => string) | undefined>)[name];
+  if (!draw) return null;
+  return <span className={className} aria-hidden="true" dangerouslySetInnerHTML={{ __html: draw() }} />;
+}
+
+export function Credit({ photo }: { photo: PhotoInfo | null }) {
+  if (!photo) return null;
+  return (
+    // "credit" lets a few layouts restyle it (e.g. the plant doctor centers it). Small muted text, its
+    // links in the same color.
+    <span className="credit block px-3 py-2 text-xs text-muted [&_a]:text-inherit">
+      Photo:{" "}
+      {/* Our own photos have no source page to link to. */}
+      {photo.source ? (
+        <a href={photo.source} target="_blank" rel="noopener noreferrer">{photo.artist}</a>
+      ) : (
+        photo.artist
+      )}
+      ,{" "}
+      {photo.licenseUrl ? (
+        <a href={photo.licenseUrl} target="_blank" rel="noopener noreferrer">{photo.license}</a>
+      ) : (
+        photo.license
+      )}
+    </span>
+  );
+}
+
+// A photo with its credit line, or the fallback illustration when the photo is missing.
+export default function Photo({ slot, alt, fallback, credit = true }: { slot: string; alt: string; fallback?: string; credit?: boolean }) {
+  const photo = getPhoto(slot);
+  if (!photo) return fallback ? <Art name={fallback} /> : null;
+  return (
+    <>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={photo.file} alt={alt} loading="lazy" />
+      {credit && <Credit photo={photo} />}
+    </>
+  );
+}
+
+// A wide photo at the top of a page, in a rounded frame with a deep shadow, and its credit underneath.
+const HERO = "overflow-hidden rounded-lg border border-line bg-surface shadow-raised backdrop-blur-glass";
+
+export function Hero({ slot, alt }: { slot: string; alt: string }) {
+  const photo = getPhoto(slot);
+  if (!photo) return null;
+  return (
+    <figure className={HERO}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={photo.file} alt={alt} className="h-[clamp(11rem,32vw,22rem)] w-full object-cover" />
+      <figcaption>
+        <Credit photo={photo} />
+      </figcaption>
+    </figure>
+  );
+}

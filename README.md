@@ -24,13 +24,16 @@ Outside zone 8a, the calendar shifts with your frost dates: spring work moves wi
 
 ### 3. Garden planner
 
-1. The planner opens with a sample yard: a house, an oak and two beds. Set the **yard size** and which way **the top of the plan faces** in the panel on the right.
-2. Add beds with **+ Raised bed** or **+ In-ground bed**, and shade sources (house, shed, tree, hedge, fence) from **+ Shade source…**.
-3. Click an item in the 3D view (or its name in the panel) to select it. Drag it to move it, or focus the view and use the arrow keys (Shift moves 5 ft, Delete removes it). Edit sizes, heights and names in the panel.
-4. Pick crops for a bed from **Add a crop**. The list is grouped into crops to plant this month in your zone, crops that grow in your zone, and the rest.
-5. Pick a **date** (or an equinox or solstice) and slide the **time** to watch shadows move. **Sun-hours map** colors the yard by hours of direct sun that day.
+The planner has **Add to the yard** and **Sun and shade** side by side on top, the 3D yard (the sandbox) across the full width under them, and the **Yard** (or selected item's) editor beside **In this yard** (everything you've placed) at the bottom. On very wide windows (111rem / 1776px and up) **Sun and shade** moves into the empty space left of the sandbox and **Add to the yard** into the space right of it, each as tall as the sandbox and scrolling inside if needed; the sandbox keeps its size. On narrower screens everything stacks. The sandbox is never smaller than 300 × 300 px.
 
-The **garden report** below gives the day's sunrise, sunset and sun angle, and a weekly watering schedule in gallons. For each bed it reports:
+1. The planner opens with a sample yard: a house, an oak and two beds. Set the **yard size** and which way **the top of the plan faces** in the Yard panel. **Snap to grid** is at its foot.
+2. Add beds (**Raised bed**, **In-ground bed**) and shade sources (house, shed, tree, hedge, fence) from **Add to the yard**. **In this yard** lists them; ⧉ duplicates a shade source.
+3. Click an item in the 3D view (or its name in **In this yard**) to select it. Drag it to move it, or focus the view and use the arrow keys (Shift moves 5 ft, Delete removes it). Its editor takes the Yard panel's place; **Done** goes back.
+4. Turn a selected item with the ⟲ ⟳ buttons in the sandbox's bottom-right corner (15° a click), or press **R** (Shift + R turns the other way). The editor's **Rotation (°)** box takes an exact angle. Turned houses, hedges and fences cast turned shadows on the sun-hours map.
+5. Pick crops for a bed with **Choose crops…**. It opens a window with every crop, filtered by type (**All**, **Vegetables**, **Fruits**, **Herbs**, **Flowers**) and by name, grouped into crops to plant this month in your zone, crops that grow in your zone, and the rest. Click a crop to put it in the bed (a check marks it) and again to take it out; a bed holds up to 12.
+6. Switch the camera with **3D** and **Top** in the sandbox's corner. In **Sun and shade**, pick a **date** (or an equinox or solstice) and slide the **time** to watch shadows move. **Sun-hours map** colors the yard by hours of direct sun that day.
+
+The **garden report** below gives the day's sunrise, sunset and sun angle, and a weekly watering schedule in gallons, side by side. Under them, **Beds** lists every bed (its size, crops, light and how many things need a look); click a row to open that bed's full report in a window, with **Edit this bed** to jump to its editor. Printed, every bed's full report is on the page. For each bed it reports:
 
 - its light (full sun to shade) and how many plants fit
 - whether each crop gets enough sun
@@ -58,11 +61,11 @@ Every plant A to Z, with a letter index. Each entry has a facts box (family, typ
 
 **Sync across devices.** While you're signed in, your starred plants, gear checklists, monthly to-dos and garden plan follow you to your other devices. Your location and light/dark choice stay on each device. Changes are sent about a second after you make them, and another device picks them up when you switch back to its tab. Deleting your account deletes the synced copies too.
 
-How it works in the code: `frontend/account/SavedDataSync.js` watches each store's change event and calls `/api/saved/`; `backend/saved/service.js` decides what's allowed (five keys, about 200 KB each, newest save wins); `backend/saved/store.js` keeps it in Firestore at `savedData/{uid}/items/{key}`; `frontend/account/sync.js` settles conflicts when two devices disagree. The list of what syncs is in `shared/saved-data.js`.
+How it works in the code: `frontend/account/SavedDataSync.ts` watches each store's change event and calls `/api/saved/`; `backend/saved/service.ts` decides what's allowed (five keys, about 200 KB each, newest save wins); `backend/saved/store.ts` keeps it in Firestore at `savedData/{uid}/items/{key}`; `frontend/account/sync.ts` settles conflicts when two devices disagree. The list of what syncs is in `shared/saved-data.ts`.
 
 ### 7. Sidebar and shop
 
-The **sidebar** (left on wider screens, along the bottom on phones) has **Account**, **Profile**, **Tools** and **Shop**. **Tools** opens a window listing every page of the book; it fades in and out over half a second. **Profile** shows your garden location and what you've saved, and whether it syncs. **Shop** lists the gear the guides call for (beekeeping, water filtration, garden supplies). The items are placeholders for now, with no prices or checkout; they're in `frontend/data/shop.js`, and their photos download with `npm run photos`.
+The **sidebar** (left on wider screens, along the bottom on phones) has **Account**, **Profile**, **Tools** and **Shop**. **Tools** opens a menu of every page of the book: point at it with the mouse (it closes when you move away), tap it on a phone, or press Enter or Space on it from the keyboard (Esc closes it). **Profile** shows your garden location and what you've saved, and whether it syncs. **Shop** lists the gear the guides call for (beekeeping, water filtration, garden supplies). The items are placeholders for now, with no prices or checkout; they're in `frontend/data/shop.ts`, and their photos download with `npm run photos`.
 
 ### Other sections
 
@@ -74,7 +77,6 @@ Every page shares the same frame:
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│ ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ four-color stripe ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ │
 │ ZONE 8A · FULTON COUNTY, GA  Change    ← location picker (dialog)      │
 │ En Gedi's Harvest                      [Auto|Light|Dark] [Print]       │
 │ Garden, kitchen, … for your zone.      [Whole book] [Sign in]          │
@@ -110,23 +112,37 @@ Home page (This month), on wide screens:
 Garden planner:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│ [+ Raised bed] [+ In-ground bed] [+ Shade source…] [3D|Top] [Sun map]  │
-│ Date [2026-11-11] (Spring equinox)(Summer solstice)…   Time ●───────── │
-├──────────────────────────────────────────────┬─────────────────────────┤
-│                                              │ Panel                   │
-│   three.js yard: beds, plants, house,        │  Yard: size, facing,    │
-│   trees, fences; real shadows; sun path;     │  list of items          │
-│   compass; optional sun-hours heat map       │  — or —                 │
-│                                              │  Bed: name, type, size, │
-│                                              │  crops, [Add a crop…]   │
-├──────────────────────────────────────────────┴─────────────────────────┤
-│ Garden report                                                          │
-│ ┌ Sun on Nov 11 ──────────┐ ┌ Watering schedule: Mon … Sun, gallons ┐  │
+┌───────────────────────────────────┬────────────────────────────────────┐
+│ Add to the yard                   │ Sun and shade                      │
+│ [Raised bed] [In-ground bed]      │ Date [11/14/2026] (equinoxes…)     │
+│ [House] [Shed] [Tree] [Hedge] …   │ Time ●──────────  [Sun-hours map]  │
+├───────────────────────────────────┴────────────────────────────────────┤
+│ [3D|Top]                                                    gizmo  ✋ 🔍 │
+│   three.js yard: beds, plants, house, trees, fences; real shadows;     │
+│   sun path; compass; optional sun-hours heat map                       │
+│ User Perspective                                      [⟲  15°  ⟳]      │
+├───────────────────────────────────┬────────────────────────────────────┤
+│ Yard: size, facing, snap          │ In this yard                       │
+│  — or —                           │  Raised bed 1   Kitchen plot       │
+│ Bed: name, type, size, rotation,  │  House ⧉        Oak ⧉              │
+│  crops, [Choose crops…] ──► crop picker window: type filters, search    │
+├───────────────────────────────────┴────────────────────────────────────┤
+│                             Garden report                              │
+│ ┌ Sun on Nov 14 ──────────┐ ┌ Watering schedule: Mon … Sun, gallons ┐  │
 │ ┌ Raised bed 1 · Full sun 10.5 h ┐ ┌ Kitchen plot · Part sun 5.2 h ┐    │
 │ │ crops, fit, planting steps,    │ │ …                              │    │
 │ │ companions, watering           │ │                                │    │
 └────────────────────────────────────────────────────────────────────────┘
+```
+
+  Windows 1776px and up: the two top panels move beside the sandbox, as tall as it.
+
+```
+┌ Sun and shade ┐ ┌ sandbox (same size as above) ───────────┐ ┌ Add to the yard ┐
+│ Date, time,   │ │                                          │ │ Beds            │
+│ sun-hours map │ │                                          │ │ Shade sources   │
+└───────────────┘ └──────────────────────────────────────────┘ └─────────────────┘
+                  ┌ Yard / Bed editor ──┐ ┌ In this yard ─────┐
 ```
 
 How a plant lookup flows:
@@ -150,34 +166,48 @@ How a plant lookup flows:
 ## How the code is organized
 
 ```
-app/                 Next.js routes only: each page.js renders a component from frontend/,
-│                    each api/**/route.api.js re-exports a handler from backend/
-├─ layout.js         masthead, tabs, footer, theme script
+app/                 Next.js routes only: each page.tsx renders a component from frontend/,
+│                    each api/**/route.api.ts re-exports a handler from backend/
+├─ layout.tsx        masthead, tabs, footer, theme script
 ├─ planner/ account/ plants/ calendar/ …     one folder per page
 └─ api/              plants, plants/research, account, billing/{checkout,portal,webhook}
 frontend/            everything that runs in the browser
-├─ sections/         each page's content (also reused by /book/)
-├─ planner/          PlannerApp, GardenScene (three.js), Editors, Report, AddCropDialog,
-│                    and pure logic: sun.js (solar position), shade.js (sun-hours map),
-│                    analysis.js (companions, planting notes, watering), model.js (saved plan)
-├─ account/          Firebase sign-in (auth.js), API client (api.js), AccountPage
-├─ components/       shared UI: Sidebar, Nav (the Tools window), LocationPicker, ZoneMap, ThemeToggle, Photo, …
-├─ lib/              browser state (location, theme, monthly checklist) and motion.js (GSAP settings)
+├─ sections/         each page's content (also reused by /book/), one folder per page, split into small parts
+│  ├─ month/         the home page: YearCalendar, MonthTile, ChecklistPacket, ChecklistItem, Suggestions…
+│  ├─ calendar/      the year table: CalendarRow, FrostLead
+│  ├─ plants/        the encyclopedia: EntryRow, EntryToggle, EntryCard, Infobox, PlantToolbar, TypeFilter…
+│  ├─ doctor/        the plant doctor: SymptomCard, CompareFrame, WeeklyCheckup
+│  ├─ recipes/       recipes and pantry: RecipeCard, RecipeGrid, SeasonFilter, PantrySection
+│  ├─ water/ remedies/   the safe water and home remedies guides
+│  ├─ animals/       bees, chickens and fish: one guide component each, plus Guide, GuideSection, GearTable…
+│  ├─ shop/ credits/ the shop and the photo credits
+│  └─ account/ profile/  sign in, plans, billing and deleting the account; the profile page
+├─ planner/          PlannerApp, GardenScene (three.js) and its parts in folders: controls/ (toolbar, sun),
+│                    scene/ (the sandbox, its turn buttons), editors/ (bed, shade source, yard), palette/ (Add to
+│                    the yard, In this yard), croppicker/ (the Choose crops window),
+│                    report/, addcrop/; and pure logic: sun.ts (solar position),
+│                    footprint.ts (turned footprints), shade.ts (sun-hours map),
+│                    analysis.ts (companions, planting notes, watering), model.ts (saved plan)
+├─ account/          Firebase sign-in (auth.ts), API client (api.ts), account sync
+├─ components/       shared UI: sidebar/ (Sidebar, the Tools hover menu), LocationPicker, ZoneMap, ThemeToggle, Photo, Tour, …
+│  └─ ui/            the building blocks: Page, SectionHeader, Kicker, Button, ButtonLink, Chip, Tag, Card, Packet,
+│                    Callout, TableCard, FactList, Columns, Steps, ToneList, Field, Hint, FormMessage, Dialog, Spinner…
+├─ lib/              browser state (location, theme, monthly checklist) and motion.ts (GSAP settings)
 ├─ data/             the book's content: calendar, plants, recipes, guides, photos
-└─ styles/           globals.css (design tokens, light and dark themes, Tailwind setup)
+└─ styles/           theme.css (design tokens, light and dark), globals.css (Tailwind setup, base styles, print)
 backend/             everything that runs on the server (Vercel functions)
-├─ handlers/         route handlers and the services they use (deps.js)
-├─ plants/           service.js (lookup rules), research.js (Claude), library.js (Firestore)
-├─ accounts/         repository.js (plans, monthly quota, Stripe event log)
-├─ billing/          service.js (Checkout, portal, webhooks)
-├─ config.js         environment variables, validated with Zod
-├─ http.js           problem-details errors, request IDs, logs, rate limiting
-└─ firebase.js       Firebase Admin: token checks and Firestore
+├─ handlers/         route handlers and the services they use (deps.ts)
+├─ plants/           service.ts (lookup rules), research.ts (Claude), library.ts (Firestore)
+├─ accounts/         repository.ts (plans, monthly quota, Stripe event log)
+├─ billing/          service.ts (Checkout, portal, webhooks)
+├─ config.ts         environment variables, validated with Zod
+├─ http.ts           problem-details errors, request IDs, logs, rate limiting
+└─ firebase.ts       Firebase Admin: token checks and Firestore
 shared/              used by both sides
-├─ zones.js          USDA zones and frost dates
-├─ crop.js           the crop record schema (Zod) and name matching
-├─ catalog.js        the 57-plant stock catalog
-└─ planting.js       planting windows and zone suggestions
+├─ zones.ts          USDA zones and frost dates
+├─ crop.ts           the crop record schema (Zod) and name matching
+├─ catalog.ts        the 57-plant stock catalog
+└─ planting.ts       planting windows and zone suggestions
 tests/               Playwright end-to-end tests (desktop Chrome, phone Safari)
 **/__tests__/        Vitest unit tests (shared, planner math, backend rules)
 ```
@@ -188,21 +218,69 @@ Saved in the browser (localStorage): location (`fhb-location`), theme, checklist
 
 Each tool does the job it's best at:
 
-- **CSS (`frontend/styles/globals.css`)**: the design tokens (colors, spacing, type, light and dark themes)
-  and the existing component styles. Hover effects stay in CSS: every one eases in and out over 300ms
-  (`--hover`, `--ease-in-out`), because a CSS transition does that with no JavaScript.
-- **Tailwind CSS v4**: utility classes for new and updated UI. It's wired to the same tokens, so
-  `bg-panel`, `text-fg`, `text-muted`, `border-line`, `bg-green-soft`, `rounded-md`, `shadow-card` and
-  `font-display` match the rest of the site in both themes, and `dark:` follows the site's theme switch.
-  Tailwind's base reset (preflight) is left out so the older styles keep working. The app moves over a
-  piece at a time, whenever that piece is being changed anyway. Done so far: the 3D view's overlay
-  (`frontend/planner/ViewControls.js`).
+- **Tailwind CSS v4**: the styling, written as utility classes in the components (the same way as the
+  portfolio). Every page and component styles itself; long class lists are split into commented groups or
+  named constants. The move from hand-written CSS was checked page by page against screenshots of every
+  route in light, dark and phone views, which match pixel for pixel.
+  - Reach for the shared building blocks in `frontend/components/ui/` before writing classes again:
+    `<Page>`, `<SectionHeader kicker title lead />`, `<Button variant="primary">`, `<Chip pressed={on}>`,
+    `<Card as="section">`, `<Packet tone="green" title>`, `<Callout tone title>`, `<TableCard>`,
+    `<Columns min={15}>`, `<Steps ordered>`, `<Field id label hint>`, `<Dialog>` with `useFadeDialog()`.
+  - A few class names have no styles and are kept as hooks for the tests or the whole-book page:
+    `entry`, `headword`, `infobox`, `entry-body`, `bed-card`, `bed-row`, `yard-list`, `rotate-angle`, `scene-canvas`, `gear`,
+    `zone-card`/`is-visible`, `page-fade`, `reveal-item`, `view`, `credit`.
+- **Look: "Ocean, Tobacco, Bone, Navy and Olive"**: frosted see-through panels over a bone page (a dark green page in
+  dark mode) with a tobacco glow and an ocean glow. Text is ocean (bone in dark), selected things are tobacco,
+  olive marks plants, navy marks water and the focus ring, and gold marks harvest and the 3D selection. Every text and fill pair meets 4.5:1 (3:1 for borders and icons) in both themes. Cards,
+  month tiles, the infobox, the sidebar and the masthead are glass (`bg-panel` plus `backdrop-blur-glass`);
+  windows and menus are solid (`bg-panel-solid`), because glass inside glass can't blur. Selected things
+  (pressed chips, the chosen month, the current page) are filled with the accent (`bg-accent text-on-accent`).
+  Print is plain white paper.
+- **Design tokens (`frontend/styles/theme.css`)**: every color, size, radius, shadow and timing, each written
+  once as `light-dark(LIGHT, DARK)`. The theme switch sets `<html data-theme>`, which pins one side.
+- **CSS (`frontend/styles/globals.css`)**: only what's truly global: Tailwind setup, base styles and print.
+  - Tailwind names for the tokens (in its `@theme inline` block).
+    Tailwind is wired to them, so `bg-panel`, `text-fg`, `text-muted`, `border-line`, `bg-green-soft`,
+    `bg-mast`, `text-mast-accent`, `rounded-md`, `shadow-card`, `min-h-tap` and `font-display` match the
+    site in both themes, and `dark:` follows the site's theme switch.
+  - Base styles for plain elements (body text, headings, links, buttons, form fields) stay in CSS on
+    purpose: they apply everywhere without a class.
+  - Spacing: Tailwind's `p-1` to `p-4` equal the site's `--s-1` to `--s-4`. Above that: `--s-5` is
+    `6` (1.5rem), `--s-6` is `8`, `--s-7` is `12`, `--s-8` is `16`.
+  - Text sizes (`text-sm`, `text-lg`…) don't change line height here; add `leading-…` when you want to.
+  - Tailwind's base reset (preflight) is left out: the base styles in globals.css set up plain elements instead.
+  - Hover effects and button presses ease in and out over 300ms. Tailwind's `transition` and
+    `transition-colors` use that timing by default, so a hover class plus `transition-colors` is all a new
+    element needs.
+  - The first page of a visit fades in over 500ms with a CSS keyframe on `<main>` (`animate-page-in`), so
+    it starts with the first paint; a GSAP fade would wait for the scripts and flash the page first.
 - **GSAP**: anything that moves on its own. That covers the 500ms page fade between pages
-  (`app/template.js`), the window fades (`frontend/lib/useFadeDialog.js`), list items fading up as they
-  scroll into view (`frontend/components/Reveal.js`) and the planner camera gliding between views
-  (`frontend/planner/blenderNav.js`). Shared timing lives in `frontend/lib/motion.js`. Every animation
+  (`app/template.tsx`; the first page uses the CSS fade above), the Tools menu (`frontend/components/sidebar/ToolsMenu.tsx`), the window fades (`frontend/lib/useFadeDialog.ts`), list items fading up as they
+  scroll into view (`frontend/components/Reveal.tsx`) and the planner camera gliding between views
+  (`frontend/planner/blenderNav.ts`). Shared timing lives in `frontend/lib/motion.ts`. Every animation
   is skipped when the reader's system asks for reduced motion, and everything shows when printing.
-- **three.js**: the 3D garden planner (`frontend/planner/GardenScene.js`, `houseModel.js`).
+- **three.js**: the 3D garden planner (`frontend/planner/GardenScene.tsx`, `houseModel.ts`).
+
+## TypeScript
+
+The whole project is TypeScript in strict mode: `.ts` for logic, `.tsx` for anything that renders.
+
+- **Shared shapes live next to the data they describe.** A crop is `Crop` (from the Zod schema in
+  `shared/crop.ts`), and a garden plan is `Garden`, `Bed` and `Obstacle` (from the schema in
+  `frontend/planner/model.ts`). An API answer the browser reads has one type used by both sides
+  (`shared/account.ts`, and `LookupResult` in `backend/plants/service.ts`). Where a Zod schema exists,
+  the type comes from it with `z.infer`, so the check that runs on real data and the type can't disagree.
+- **API calls name what they expect back:** `api<{ items: … }>("/api/saved/")`.
+- **Services take their dependencies as interfaces** (`AccountStore`, `PlantLibrary`, `SavedStore`,
+  `StripeLike`), so the unit tests pass small in-memory fakes with the same methods.
+- **Test helpers:** `frontend/planner/__tests__/fixtures.ts` builds a full bed, shade source or garden
+  from just the fields a test cares about.
+- **What stays JavaScript:** the config files ESLint and PostCSS load (`eslint.config.mjs`,
+  `postcss.config.mjs`) and the two Node scripts in `scripts/`, so they run with plain `node`.
+  `fetch-photos.mjs` is still type-checked through `// @ts-check` and JSDoc comments;
+  `build-us-map.mjs` isn't, because it runs from a scratch folder with packages this project doesn't install.
+- **`tsconfig.json` is partly managed by Next.js,** which reformats it and adds its own `include`
+  entries on every build. Edit it if you need to, but expect Next.js to reformat it.
 
 ## Running it
 
@@ -238,8 +316,9 @@ Use test keys while trying it out; locally, `stripe listen --forward-to localhos
 ## Checking your work
 
 ```bash
+npm run typecheck                         # TypeScript, strict mode (next build runs this too)
 npm run lint                              # ESLint
-npx vitest run                            # unit tests: zones, catalog, sun and shade math, bed analysis, backend rules
+npm test                                  # unit tests: zones, catalog, sun and shade math, bed analysis, backend rules
 npx playwright install chromium webkit    # first time only
 npm run test:e2e                          # builds the offline site, then tests it in desktop Chrome and phone Safari
 ```
@@ -247,7 +326,7 @@ npm run test:e2e                          # builds the offline site, then tests 
 ## Builds and deploying
 
 - **Online (Vercel):** pushing to `main` deploys. `vercel.json` pins the Next.js framework and sets the security headers. Pages are static; the `/api/*` routes run as serverless functions.
-- **Offline:** `npm run offline` builds a static site into `/out` (with `STATIC_EXPORT=1`) and serves it at http://localhost:3000. Files ending in `.api.js` are left out of that build, so the offline copy has no server code. Accounts and research then say they need the online version, and everything else works.
+- **Offline:** `npm run offline` builds a static site into `/out` (with `STATIC_EXPORT=1`) and serves it at http://localhost:3000. Files ending in `.api.ts` are left out of that build, so the offline copy has no server code. Accounts and research then say they need the online version, and everything else works.
 
 ## Decisions
 
@@ -257,10 +336,10 @@ npm run test:e2e                          # builds the offline site, then tests 
 - **Quota is counted before research and refunded on failure,** inside a Firestore transaction, so two tabs can't overspend it.
 - **Stripe is the source of truth for subscriptions.** Webhooks are signature-checked and each event is applied once.
 - **Accounts store no personal data in Firestore.** Firebase Authentication holds email and name; deleting an account cancels billing and removes both.
-- **Zones and frost dates:** average last spring and first fall frost per USDA zone (`shared/zones.js`). The month calendar, written for 8a, shifts by the difference. Crop records store planting windows as weeks from frost, so one record works in every zone. Dates are least precise in zones 1–4 and 10–13, and the app says so there.
-- **Sun math** uses NOAA's solar-position equations (`frontend/planner/sun.js`). The sun-hours map casts a ray toward the sun from each cell of a grid over the yard, every 15 minutes from sunrise to sunset, against the house, sheds, hedges, fences and tree canopies.
+- **Zones and frost dates:** average last spring and first fall frost per USDA zone (`shared/zones.ts`). The month calendar, written for 8a, shifts by the difference. Crop records store planting windows as weeks from frost, so one record works in every zone. Dates are least precise in zones 1–4 and 10–13, and the app says so there.
+- **Sun math** uses NOAA's solar-position equations (`frontend/planner/sun.ts`). The sun-hours map casts a ray toward the sun from each cell of a grid over the yard, every 15 minutes from sunrise to sunset, against the house, sheds, hedges, fences and tree canopies.
 - **three.js** draws the yard, and loads only on the planner page. It renders on demand, not in a loop, and follows the light and dark theme. Every action in the 3D view can also be done from the panel, for keyboard and screen-reader users.
 - **Fonts and photos are local** (no Google Fonts or image CDNs). The only outside services are the ones you set up: Firebase, Anthropic and Stripe.
-- **Plain CSS with design tokens** in `frontend/styles/globals.css`, in cascade layers, with light and dark themes from the same tokens. The theme switch applies before first paint. The dark token block appears twice (OS dark and saved dark), so edit both.
-- **The bee, chicken and fish guides** are trusted, author-written HTML in `frontend/data/animals.js`, rendered with `dangerouslySetInnerHTML`. Their laws and seasons are for Georgia, and each guide says so.
+- **Design tokens** in `frontend/styles/theme.css`, each color written once with `light-dark()`, and the rest of the styles in `frontend/styles/globals.css`, in cascade layers. The theme switch applies before first paint.
+- **The bee, chicken and fish guides** are trusted, author-written HTML in `frontend/data/animals.ts`, rendered with `dangerouslySetInnerHTML`. Their laws and seasons are for Georgia, and each guide says so.
 - **The CSP allows `'unsafe-inline'` scripts,** because the static export inlines hydration scripts, plus Firebase's sign-in hosts. Security headers live in `vercel.json` (online) and `public/serve.json` (offline); change both together.

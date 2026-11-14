@@ -1,0 +1,123 @@
+/* Design tokens for the "Ocean, Tobacco, Bone, Navy and Olive" look: every color, size, radius, shadow and timing
+   in one place. Light: a bone page, ocean text, tobacco for selected things. Dark: the original dark green page with
+   green-tinted glass panels, bone text, a lighter tobacco for selected things. Olive is the plant color, navy the water color and the focus ring, and
+   gold (the lettering color) the harvest/bee color and the 3D selection.
+   Each color is written once as light-dark(LIGHT, DARK). The browser picks the side from color-scheme:
+   - nothing chosen: follows the OS (color-scheme: light dark)
+   - the theme switch saved a choice: <html data-theme="light|dark"> pins one side (frontend/lib/theme.ts)
+   Tailwind names for these tokens (bg-panel, text-accent…) are mapped in globals.css's @theme inline block.
+   Every text and fill pair is checked for contrast (4.5:1 text, 3:1 borders and icons) in both themes.
+   Imported by globals.css; the layer order (tokens, then print) is declared there. */
+
+@layer tokens {
+  :root {
+    color-scheme: light dark;
+
+    /* ---------- surfaces and text ---------- */
+    --bg: light-dark(#ebe2d1, #0e1411); /* bone / dark green */
+    /* panel: frosted glass for cards (pair it with backdrop-filter: blur(var(--blur))).
+       panel-solid: opaque, for windows and menus, because glass on top of glass can't blur. */
+    --panel: light-dark(rgb(250 246 238 / 0.74), rgb(28 38 32 / 0.72));
+    --panel-solid: light-dark(#f8f3ea, #18211c);
+    --surface: light-dark(rgb(255 252 245 / 0.55), rgb(236 226 208 / 0.06)); /* quiet fills: hovers, table heads, wells */
+    --fg: light-dark(#13233a, #ece2d0); /* ocean / bone */
+    --muted: light-dark(#4b5464, #aab2bd);
+    --line: light-dark(rgb(19 35 58 / 0.14), rgb(236 226 208 / 0.1));
+    --line-strong: light-dark(rgb(19 35 58 / 0.28), rgb(236 226 208 / 0.22));
+
+    /* accent: the fill for selected things (pressed chips, the chosen month, the current page), with on-accent text */
+    --accent: light-dark(#7d3f1c, #d9a273); /* tobacco / light tobacco */
+    --on-accent: light-dark(#f8f3ea, #0e1411);
+
+    /* page glows: two soft radial lights behind everything (body background in globals.css) */
+    --glow-start: light-dark(#e3cdb0, #1c3324); /* top left: tobacco (light), green (dark) */
+    --glow-end: light-dark(#d5dae0, #2e2814); /* top right: ocean (light), warm brown (dark) */
+
+    /* ---------- job colors ----------
+       One color per job: green (olive) = plant, yellow (gold) = harvest/bees, red = safety/chickens,
+       blue (navy) = water/fish. base (text, icons, borders), -soft (tinted fills), -ink (text on -soft).
+       The names stay green/yellow/red/blue so every component keeps working; the colors are the palette's. */
+    --green: light-dark(#5a5a24, #c4c07c); /* olive */
+    --green-soft: light-dark(#e5e1c4, #2a2b18);
+    --green-ink: light-dark(#47461a, #d6d29a);
+    --yellow: light-dark(#b88a2c, #dcb46a);
+    --yellow-soft: light-dark(#f1e2bf, #2b2414);
+    --yellow-ink: light-dark(#664708, #ecc98a);
+    --star: light-dark(#8a6410, #dcb46a); /* gold dark enough (3:1+) for the starred-plant icon */
+    --red: light-dark(#a3322a, #f08a7c);
+    --red-soft: light-dark(#f1dbd2, #36191b);
+    --red-ink: light-dark(#8c2a23, #f5a497);
+    --blue: light-dark(#1f2e66, #a3b3e8); /* navy */
+    --blue-soft: light-dark(#dde0ec, #19214a);
+    --blue-ink: light-dark(#1b2958, #b9c5ef);
+    --focus: light-dark(#1f2e66, #a9b8ec); /* navy ring */
+
+    /* ---------- masthead ----------
+       A frosted band: ocean text on bone (bone on dark green in dark), "Harvest" in the accent tobacco. */
+    --mast-bg: light-dark(rgb(250 246 238 / 0.5), rgb(20 28 23 / 0.6));
+    --mast-fg: var(--fg);
+    --mast-muted: var(--muted);
+    --mast-accent: var(--accent);
+    --mast-line: var(--line-strong);
+    --mast-hover: light-dark(rgb(19 35 58 / 0.07), rgb(236 226 208 / 0.07));
+
+    /* ---------- drawings in data/art.ts ---------- */
+    --leaf: #2f8f45; --leaf-dark: #1b5e2b; --leaf-yellow: #e2c13c; --spot: #6b4421;
+    --mildew: light-dark(#f4f4ee, #e8e8e0);
+    --scorch: #8a5a2b; --tomato: #d6382d; --rot: #3a2a1c; --stalk: #3f7a3a;
+
+    /* ---------- depth ----------
+       Soft ocean-tinted shadows in light mode, black in dark. --blur frosts the glass panels. */
+    --shadow-1: 0 8px 24px light-dark(rgb(19 35 58 / 0.08), rgb(0 0 0 / 0.35));
+    --shadow-2: 0 20px 48px light-dark(rgb(19 35 58 / 0.14), rgb(0 0 0 / 0.5));
+    --blur: 14px;
+
+    /* ---------- type ---------- */
+    --f-display: "Archivo", "Arial Black", Impact, sans-serif;
+    --f-body: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+    --t-xs: 0.75rem; --t-sm: 0.875rem; --t-md: 1rem; --t-lg: 1.125rem; --t-xl: 1.375rem;
+    --t-2xl: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+    --t-3xl: clamp(2rem, 1.3rem + 3.2vw, 3.25rem);
+
+    /* ---------- spacing (4 / 8 / 12 / 16 / 24 / 32 / 48 / 64) ---------- */
+    --s-1: 0.25rem; --s-2: 0.5rem; --s-3: 0.75rem; --s-4: 1rem; --s-5: 1.5rem; --s-6: 2rem; --s-7: 3rem; --s-8: 4rem;
+
+    /* ---------- shape ---------- */
+    /* rounded-md (6px, Tailwind's own size): buttons, form fields and small tiles. rounded-lg: cards and
+       windows. rounded-sm: a few small inner pieces (checklist rows, thumbnails, the letter index). */
+    --r-sm: 12px; --r-md: 6px; --r-lg: 26px; --r-pill: 999px;
+    --tap: 2.75rem; /* the 44px minimum touch target */
+
+    /* ---------- motion ----------
+       --fade: fades and windows (500ms). --hover: every hover and press change (300ms, ease in and out).
+       The house rule is 300–500ms for anything that moves. */
+    --fade: 500ms;
+    --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --hover: 300ms;
+    --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  }
+
+  /* The theme switch's saved choice pins one side of every light-dark() above. */
+  :root[data-theme="light"] { color-scheme: light; }
+  :root[data-theme="dark"] { color-scheme: dark; }
+}
+
+/* Print: plain white paper and black text, whatever the screen theme. No glass, no blur. */
+@layer print {
+  @media print {
+    :root, :root[data-theme="light"], :root[data-theme="dark"] {
+      color-scheme: light;
+      --bg: #fff; --panel: #fff; --panel-solid: #fff; --surface: #fff;
+      --fg: #000; --muted: #333; --line: #bbb; --line-strong: #888;
+      --accent: #6b3517; --on-accent: #fff;
+      --green: #46451a; --green-ink: #46451a; --green-soft: #fff;
+      --yellow: #8a6400; --yellow-ink: #6f5000; --yellow-soft: #fff;
+      --red: #9e2c22; --red-ink: #9e2c22; --red-soft: #fff;
+      --blue: #1b2958; --blue-ink: #1b2958; --blue-soft: #fff;
+      --mast-bg: transparent;
+      --shadow-1: none; --shadow-2: none;
+      --blur: 0px;
+    }
+  }
+}
