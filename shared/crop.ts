@@ -14,7 +14,7 @@ export const HABITS = ["leafy", "root", "bush", "vine", "tall", "clump", "ground
 export type Habit = (typeof HABITS)[number];
 export const SEASONS = ["cool", "warm", "perennial"] as const;
 export type Season = (typeof SEASONS)[number];
-export const METHODS = ["direct", "transplant", "sets", "cloves", "crowns", "slips", "tubers", "bare-root", "container", "division"] as const;
+export const METHODS = ["direct", "transplant", "sets", "cloves", "crowns", "slips", "tubers", "bare-root", "container", "division", "bulbs"] as const;
 export type Method = (typeof METHODS)[number];
 export const METHOD_LABEL: Record<Method, string> = {
   direct: "Sow seed in place",
@@ -27,11 +27,12 @@ export const METHOD_LABEL: Record<Method, string> = {
   "bare-root": "Plant bare-root while dormant",
   container: "Plant a container-grown plant",
   division: "Plant divisions or offsets",
+  bulbs: "Plant bulbs, pointed end up",
 };
 export const BEDS = ["raised", "in-ground", "either"] as const;
-export const FLOWER_GROUPS = ["rose", "peony", "camellia", "companion"] as const;
+export const FLOWER_GROUPS = ["rose", "peony", "camellia", "bulb", "companion"] as const;
 export type FlowerGroup = (typeof FLOWER_GROUPS)[number];
-export const FLOWER_GROUP_LABEL: Record<FlowerGroup, string> = { rose: "Roses", peony: "Peonies", camellia: "Camellias", companion: "Flowering companions" };
+export const FLOWER_GROUP_LABEL: Record<FlowerGroup, string> = { rose: "Roses", peony: "Peonies", camellia: "Camellias", bulb: "Spring bulbs", companion: "Companion plants" };
 export const ORIGINS = ["stock", "research", "custom"] as const;
 
 const weeks = z.tuple([z.number().min(-30).max(30), z.number().min(-30).max(30)]);
@@ -76,7 +77,7 @@ export const CropSchema = z.object({
   book: z.string().max(80).optional(), // the plant's name in the encyclopedia, when it has a full entry
   zoneNote: z.string().max(320).optional(), // researched plants: a note for the zone that was asked about
   sources: z.array(SourceSchema).max(8).default([]),
-  // Garden flowers (roses, peonies, camellias and their companions) keep their nursery details as written.
+  // Garden flowers (roses, peonies, camellias, spring bulbs and their companions) keep their nursery details as written.
   flower: z
     .object({
       group: z.enum(FLOWER_GROUPS),
@@ -138,6 +139,7 @@ const ALIASES: Record<string, string> = {
   cowpea: "southern-peas", "field pea": "southern-peas", "black eyed pea": "southern-peas", "southern pea": "southern-peas",
   scallion: "onion", "green onion": "onion", "walking onion": "onion", shallot: "onion",
   collard: "collards", "collard green": "collards",
+  "japanese maple": "companion-japanese-red-maple", "red japanese maple": "companion-japanese-red-maple", "bloodgood japanese maple": "companion-japanese-red-maple",
   mustard: "mustard-greens", "mustard green": "mustard-greens",
   chard: "swiss-chard", "silverbeet": "swiss-chard",
   pumpkin: "winter-squash", "butternut squash": "winter-squash", "winter squash": "winter-squash",

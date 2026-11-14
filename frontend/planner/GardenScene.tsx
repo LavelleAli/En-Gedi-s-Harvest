@@ -2,12 +2,13 @@
 
 // The 3D yard, drawn with three.js. Beds, plants and shade-casting objects come from the garden plan;
 // a directional light placed at the computed sun position casts real shadows. Click an item to select
-// it, drag it to move it, or focus the view and use the arrow keys. Renders only when something changes.
+// it, drag it to move it, or focus the view and use the arrow keys (R turns it). Renders only when something changes.
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { createBlenderNav, type BlenderNav, type NavHub } from "@/frontend/planner/blenderNav";
 import ViewControls from "@/frontend/planner/ViewControls";
+import { extent, ROT_STEP } from "@/frontend/planner/footprint";
 import { snapToGrid, type Bed, type Garden, type Item, type Obstacle } from "@/frontend/planner/model";
 import type { CropsById } from "@/frontend/planner/analysis";
 import type { SunGrid } from "@/frontend/planner/shade";
@@ -15,13 +16,16 @@ import type { SunPosition, SunSample } from "@/frontend/planner/sun";
 import type { Crop, Habit, Kind } from "@/shared/crop";
 import { buildBuilding } from "@/frontend/planner/houseModel";
 import { sunVector } from "@/frontend/planner/sun";
+import { SCENE_BOX } from "@/frontend/planner/scene/sceneStyle";
 
-/** The scene's colors: hex numbers for three.js materials, plus a CSS color for the compass letters. */
+/** The scene's colors: hex numbers for three.js materials, plus a CSS color for the compass letters.
+    The sky and the ground outside the yard follow the site's Bone (light) and dark green (dark) pages, the lawn
+    is olive, and the selection box and sun path are the gold lettering color. */
 type Palette = (typeof PALETTES)["light"];
 
 const PALETTES = {
-  light: { sky: 0xe6eef0, lawn: 0x9dbf7e, outside: 0xc9d0bf, gridLine: 0x86a96b, soil: 0x6e4c30, wood: 0xa57a45, wall: 0xe0d6c6, roof: 0x8a4f3c, houseWall: 0xf3f1ec, houseRoof: 0x4a5059, trim: 0xfbfaf7, glass: 0x2b3a42, shutter: 0x8db4d9, door: 0x8fb8dc, brick: 0xa4513c, trunk: 0x6b4a33, leaf: 0x3f7134, hedge: 0x46733b, fence: 0x9c7c57, select: 0xf1c54b, path: 0xe0a21d, label: "#33402f" },
-  dark: { sky: 0x101612, lawn: 0x3d5a35, outside: 0x1c241e, gridLine: 0x4d6b43, soil: 0x4a3322, wood: 0x7d5c37, wall: 0x9b9387, roof: 0x6a3d30, houseWall: 0xb9b6ae, houseRoof: 0x353a41, trim: 0xc9c7c1, glass: 0x162026, shutter: 0x5d7e9e, door: 0x6385a6, brick: 0x7a3d2e, trunk: 0x4f3826, leaf: 0x2f5a2a, hedge: 0x34582e, fence: 0x7a6146, select: 0xf0c85a, path: 0xe2b544, label: "#d8ddd4" },
+  light: { sky: 0xefe7da, lawn: 0xa3a86a, outside: 0xd3c8b2, gridLine: 0x80864c, soil: 0x6e4c30, wood: 0xa57a45, wall: 0xe0d6c6, roof: 0x8a4f3c, houseWall: 0xf3f1ec, houseRoof: 0x4a5059, trim: 0xfbfaf7, glass: 0x2b3a42, shutter: 0x8db4d9, door: 0x8fb8dc, brick: 0xa4513c, trunk: 0x6b4a33, leaf: 0x3f7134, hedge: 0x46733b, fence: 0x9c7c57, select: 0xc99a4e, path: 0xb98a2c, label: "#13233a" },
+  dark: { sky: 0x101612, lawn: 0x55602f, outside: 0x1c241e, gridLine: 0x6f7a3e, soil: 0x4a3322, wood: 0x7d5c37, wall: 0x9b9387, roof: 0x6a3d30, houseWall: 0xb9b6ae, houseRoof: 0x353a41, trim: 0xc9c7c1, glass: 0x162026, shutter: 0x5d7e9e, door: 0x6385a6, brick: 0x7a3d2e, trunk: 0x4f3826, leaf: 0x2f5a2a, hedge: 0x34582e, fence: 0x7a6146, select: 0xdcb46a, path: 0xdcb46a, label: "#ece2d0" },
 };
 const KIND_COLOR: Record<Kind, number> = { veg: 0x4f8f3a, herb: 0x7aa860, fruit: 0x3f7d3a, flower: 0x8f6fb0 };
 const FRUIT_COLOR: Record<string, number | undefined> = { strawberry: 0xd23a33, tomato: 0xd8442f, pepper: 0xd8442f, blueberry: 0x4a5fa8, citrus: 0xf0a020, apple: 0xc8372d, persimmon: 0xe58a2a, watermelon: 0x2f7a3a, "winter-squash": 0xe08a2a };
@@ -250,6 +254,7 @@ export type GardenSceneProps = {
   onSelect: (id: string | null) => void;
   onMove: (id: string, x: number, z: number, step: number) => void;
   onDelete: (id: string) => void;
+  onRotate: (id: string, rot: number) => void; // R and Shift+R turn the selected item
   view: "3d" | "top";
   viewTick: number; // changes on every press of the 3D/Top buttons
   snapStep: number; // grid size in feet, or 0 with snapping off
@@ -258,7 +263,7 @@ export type GardenSceneProps = {
 };
 
 // The props the once-only event handlers read (they'd see stale values if they closed over props).
-type LiveProps = Pick<GardenSceneProps, "garden" | "onSelect" | "onMove" | "onDelete" | "selectedId" | "snapStep" | "gridSize">;
+type LiveProps = Pick<GardenSceneProps, "garden" | "onSelect" | "onMove" | "onDelete" | "onRotate" | "selectedId" | "snapStep" | "gridSize">;
 // Everything the effects below share, created once in the setup effect.
 type SceneState = {
   renderer: THREE.WebGLRenderer;
@@ -278,10 +283,10 @@ type SceneState = {
 // latest snapped position.
 type Drag = { group: THREE.Object3D; item: Item; offset: THREE.Vector3; moved: boolean; at: Item | null; step: number };
 
-export default function GardenScene({ garden, cropsById, sun, path, heat, selectedId, onSelect, onMove, onDelete, view, viewTick, snapStep, gridSize, label }: GardenSceneProps) {
+export default function GardenScene({ garden, cropsById, sun, path, heat, selectedId, onSelect, onMove, onDelete, onRotate, view, viewTick, snapStep, gridSize, label }: GardenSceneProps) {
   const mountRef = useRef<HTMLDivElement>(null);
   const stateRef = useRef<SceneState | null>(null);
-  const propsRef = useRef<LiveProps>({ garden, onSelect, onMove, onDelete, selectedId, snapStep, gridSize });
+  const propsRef = useRef<LiveProps>({ garden, onSelect, onMove, onDelete, onRotate, selectedId, snapStep, gridSize });
   // This component only renders in the browser (loaded with ssr: false), so the check can run here.
   const [error, setError] = useState(() => (webglAvailable() ? "" : NO_WEBGL));
   const [themeKey, setThemeKey] = useState(0);
@@ -290,7 +295,7 @@ export default function GardenScene({ garden, cropsById, sun, path, heat, select
   const hubRef = useRef<NavHub>({ nav: null, listeners: new Set() });
   // Event handlers set up once read the latest props through this ref.
   useLayoutEffect(() => {
-    propsRef.current = { garden, onSelect, onMove, onDelete, selectedId, snapStep, gridSize };
+    propsRef.current = { garden, onSelect, onMove, onDelete, onRotate, selectedId, snapStep, gridSize };
   });
 
   // One-time setup: renderer, camera, controls, lights, pointer and keyboard handling.
@@ -309,7 +314,9 @@ export default function GardenScene({ garden, cropsById, sun, path, heat, select
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     const canvas = renderer.domElement;
     canvas.tabIndex = 0;
-    canvas.className = "scene-canvas";
+    // "scene-canvas" is a test hook. It fills the box; touch gestures go to the 3D view, not the page; the
+    // focus ring sits inside the box's rounded edge.
+    canvas.className = "scene-canvas block size-full cursor-grab touch-none focus-visible:-outline-offset-3";
     canvas.setAttribute("role", "application");
     mount.appendChild(canvas);
 
@@ -331,7 +338,7 @@ export default function GardenScene({ garden, cropsById, sun, path, heat, select
     const content = new THREE.Group(); // beds and obstacles: rebuilt when the plan changes
     const overlay = new THREE.Group(); // sun path, sun disc, heat map
     scene.add(world, content, overlay);
-    const selection = new THREE.BoxHelper(new THREE.Object3D(), 0xf1c54b);
+    const selection = new THREE.BoxHelper(new THREE.Object3D(), 0xc99a4e);
     selection.visible = false;
     scene.add(selection);
 
@@ -358,7 +365,8 @@ export default function GardenScene({ garden, cropsById, sun, path, heat, select
         const { garden: g, selectedId: id } = propsRef.current;
         const item = id && [...g.beds, ...g.obstacles].find((i) => i.id === id);
         if (!item) return null;
-        return { center: [item.x - g.yard.w / 2, 0, item.z - g.yard.d / 2], size: Math.max(item.w, item.d) };
+        const box = extent(item);
+        return { center: [item.x - g.yard.w / 2, 0, item.z - g.yard.d / 2], size: Math.max(box.w, box.d) };
       },
       onChange: () => hub.listeners.forEach((f) => f()),
     });
@@ -444,7 +452,7 @@ export default function GardenScene({ garden, cropsById, sun, path, heat, select
     };
     const onKeyDown = (e: KeyboardEvent) => {
       if (nav.handleKey(e)) return;
-      const { garden: g, selectedId: id, onMove: move, onDelete: del, onSelect: select, snapStep: grid } = propsRef.current;
+      const { garden: g, selectedId: id, onMove: move, onDelete: del, onSelect: select, onRotate: rotate, snapStep: grid } = propsRef.current;
       if (!id) return;
       const item = [...g.beds, ...g.obstacles].find((i) => i.id === id);
       if (!item) return;
@@ -455,6 +463,10 @@ export default function GardenScene({ garden, cropsById, sun, path, heat, select
       if (by) {
         e.preventDefault();
         move(id, item.x + by[0], item.z + by[1], grid);
+      } else if (e.code === "KeyR" && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        // R turns it clockwise by 15°, Shift+R back the other way (Cmd/Ctrl+R still reloads the page).
+        e.preventDefault();
+        rotate(id, (item.rot ?? 0) + (e.shiftKey ? -ROT_STEP : ROT_STEP));
       } else if (e.key === "Delete" || e.key === "Backspace") {
         e.preventDefault();
         del(id);
@@ -553,6 +565,8 @@ export default function GardenScene({ garden, cropsById, sun, path, heat, select
     let selected: THREE.Group | null = null;
     for (const [item, group] of items) {
       group.position.set(item.x - garden.yard.w / 2, 0, item.z - garden.yard.d / 2);
+      // The plan turns clockwise seen from above; three.js turns counterclockwise about +y, hence the minus.
+      group.rotation.y = -((item.rot ?? 0) * Math.PI) / 180;
       group.userData.pickId = item.id;
       s.content.add(group);
       if (item.id === selectedId) selected = group;
@@ -636,8 +650,8 @@ export default function GardenScene({ garden, cropsById, sun, path, heat, select
   }, [label]);
 
   return (
-    <div className="scene" ref={mountRef}>
-      {error ? <p className="scene-error">{error}</p> : <ViewControls hubRef={hubRef} />}
+    <div className={SCENE_BOX} ref={mountRef}>
+      {error ? <p className="p-6">{error}</p> : <ViewControls hubRef={hubRef} />}
     </div>
   );
 }

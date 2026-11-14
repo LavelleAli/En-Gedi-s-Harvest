@@ -3,6 +3,7 @@
 // and a weekly watering schedule. Pure functions, so they can be unit-tested.
 import { matchCropIds, METHOD_LABEL, type Crop } from "@/shared/crop";
 import type { Bed } from "@/frontend/planner/model";
+import { extent, gapBetween as turnedGap, isAskew } from "@/frontend/planner/footprint";
 import { plantingWindows, seasonFit, windowText } from "@/shared/planting";
 import { frostDays, isFrostFree } from "@/shared/zones";
 
@@ -41,9 +42,13 @@ function relation(a: Crop, b: Crop, crops: readonly Crop[]): "good" | "bad" | nu
   return null;
 }
 
+// How far apart two beds are. Upright beds (or ones turned a quarter turn) use the wider of the
+// left-right and top-bottom gaps, as before; a bed turned off the grid uses the true edge-to-edge distance.
 function gapBetween(a: Bed, b: Bed): number {
-  const gx = Math.max(0, Math.abs(a.x - b.x) - (a.w + b.w) / 2);
-  const gz = Math.max(0, Math.abs(a.z - b.z) - (a.d + b.d) / 2);
+  if (isAskew(a) || isAskew(b)) return turnedGap(a, b);
+  const [ea, eb] = [extent(a), extent(b)];
+  const gx = Math.max(0, Math.abs(a.x - b.x) - (ea.w + eb.w) / 2);
+  const gz = Math.max(0, Math.abs(a.z - b.z) - (ea.d + eb.d) / 2);
   return Math.max(gx, gz);
 }
 

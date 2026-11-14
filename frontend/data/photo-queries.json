@@ -249,5 +249,9 @@
   },
   "shop-row-cover": {
     "query": "floating row cover garden"
+  },
+  "plant-japanese-red-maple": {
+    "query": "Acer palmatum Bloodgood",
+    "file": "File:Acer palmatum 'Bloodgood' kz01.jpg"
   }
 }

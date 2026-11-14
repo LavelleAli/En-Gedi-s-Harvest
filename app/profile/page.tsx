@@ -1,4 +1,4 @@
-import ProfilePage from "@/frontend/account/ProfilePage";
+import ProfilePage from "@/frontend/sections/profile/ProfilePage";
 
 export const metadata = { title: "Profile", robots: { index: false } };
 

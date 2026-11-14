@@ -1,16 +1,18 @@
 "use client";
 
-import Link from "next/link";
+// "Print this page" and "Whole book", in the masthead: see-through buttons with a hairline border.
+import Button from "@/frontend/components/ui/Button";
+import ButtonLink from "@/frontend/components/ui/ButtonLink";
 
 export default function PrintButtons() {
   return (
-    <div className="printbar">
-      <button type="button" onClick={() => window.print()}>
+    <div className="flex flex-wrap gap-2" data-tour="print">
+      <Button variant="on-masthead" onClick={() => window.print()}>
         Print this page
-      </button>
-      <Link className="btn" href="/book/">
+      </Button>
+      <ButtonLink variant="on-masthead" href="/book/">
         Whole book
-      </Link>
+      </ButtonLink>
     </div>
   );
 }

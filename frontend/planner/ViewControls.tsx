@@ -32,7 +32,7 @@ function read(nav: BlenderNav | null): ViewInfo | null {
 
 // One round button in the right-hand column. min-h-0 and p-0 undo the site-wide button size;
 // hover/aria-pressed colors come after the base color so they win.
-const BTN = "grid size-9 min-h-0 place-items-center rounded-full p-0 touch-none bg-surface/80 hover:bg-surface aria-pressed:bg-blue aria-pressed:text-bg aria-pressed:border-blue";
+const BTN = "grid size-9 min-h-0 place-items-center rounded-md p-0 touch-none bg-surface/80 hover:bg-surface aria-pressed:bg-blue aria-pressed:text-bg aria-pressed:border-blue";
 
 const VIEW_NAMES: Record<ViewName, string> = { right: "Right", left: "Left", back: "Back", front: "Front", top: "Top" };
 
@@ -94,7 +94,8 @@ export default function ViewControls({ hubRef }: { hubRef: RefObject<NavHub> }) 
 
   return (
     <>
-      <div className="pointer-events-none absolute top-2 left-2 grid gap-0.5 rounded-md bg-surface/80 px-2 py-1 text-xs leading-snug" aria-live="polite">
+      {/* The view's name and camera position, in the bottom-left corner (the camera buttons have the top). */}
+      <div className="pointer-events-none absolute bottom-2 left-2 grid gap-0.5 rounded-md bg-surface/80 px-2 py-1 text-xs leading-snug" aria-live="polite">
         <span className="view-name font-bold">{info.label}</span>
         <span className="view-pos text-muted tabular-nums">
           Camera <b className="text-[#c8283d]">X</b> {ft(info.pos.x)} · <b className="text-[#4f8a26]">Y</b> {ft(info.pos.y)} · <b className="text-[#2470c8]">Z</b> {ft(info.pos.z)} ft

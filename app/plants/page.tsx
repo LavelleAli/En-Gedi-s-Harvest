@@ -1,4 +1,4 @@
-import PlantsSection from "@/frontend/sections/PlantsSection";
+import PlantsSection from "@/frontend/sections/plants/PlantsSection";
 
 export const metadata = {
   title: "Plant encyclopedia",

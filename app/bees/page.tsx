@@ -1,4 +1,4 @@
-import { BeesSection } from "@/frontend/sections/AnimalSections";
+import { BeesSection } from "@/frontend/sections/animals/AnimalSections";
 
 export const metadata = {
   title: "Beekeeping",

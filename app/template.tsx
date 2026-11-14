@@ -1,8 +1,9 @@
 "use client";
 
 // A template (unlike a layout) remounts on every navigation, so each new page fades in over 500ms
-// (GSAP, frontend/lib/motion.ts). The very first page of a visit appears as soon as it loads; only
-// moves between pages fade, so a slow connection never leaves a blank page waiting for scripts.
+// (GSAP, frontend/lib/motion.ts). The very first page of a visit is skipped here: it fades in with a CSS
+// keyframe on <main> instead (animate-page-in, app/layout.tsx), which starts with the first paint. A GSAP
+// fade would only start once the scripts load, so the page would show, vanish, then fade back in.
 import { useRef, type ReactNode } from "react";
 import { EASE, FADE, duration, gsap, useGSAP } from "@/frontend/lib/motion";
 

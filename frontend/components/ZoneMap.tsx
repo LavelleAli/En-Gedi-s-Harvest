@@ -11,6 +11,19 @@ import { STATE_ZONES } from "@/frontend/data/state-zones";
 type MapData = typeof import("@/frontend/data/us-states");
 type Card = { summary: StateSummary; x: number; y: number; width: number };
 
+// A state's outline: a thin line in the window's color, darker and thicker on hover or keyboard focus,
+// thickest on the chosen state. (The focus ring is the thicker outline, not a box.)
+const STATE = "cursor-pointer stroke-panel-solid stroke-1 transition-[opacity,stroke,stroke-width] focus-visible:outline-none";
+const STATE_ACTIVE = "hover:stroke-fg hover:stroke-2 focus-visible:stroke-fg focus-visible:stroke-2";
+const STATE_SELECTED = "stroke-fg stroke-[2.5]";
+
+// The floating card (zone-card and is-visible are test hooks). It fades over 500ms, and is hidden from
+// the pointer and from screen readers (the state's own label says the same).
+const CARD = "zone-card pointer-events-none absolute z-[2] w-[15.5rem] rounded-md border border-line-strong bg-panel px-4 py-3 text-sm text-fg shadow-raised";
+// Fading out, `visibility` waits for the fade to finish before hiding the card.
+const CARD_SHOWN = "is-visible visible opacity-100 [transition:opacity_var(--fade)_var(--ease-in-out),visibility_0s]";
+const CARD_HIDDEN = "invisible opacity-0 [transition:opacity_var(--fade)_var(--ease-in-out),visibility_0s_linear_var(--fade)]";
+
 export default function ZoneMap({ onPick, selected }: { onPick: (state: StateShape) => void; selected?: string }) {
   const [map, setMap] = useState<MapData | null>(null); // { MAP_SIZE, STATE_SHAPES } once loaded
   const [card, setCard] = useState<Card | null>(null); // kept during fade-out so the text doesn't vanish first
@@ -39,14 +52,19 @@ export default function ZoneMap({ onPick, selected }: { onPick: (state: StateSha
     show(name, r.left + r.width / 2, r.top + r.height / 2);
   }
 
-  if (!map) return <div className="zone-map zone-map-loading" role="status">Loading the map…</div>;
+  if (!map)
+    return (
+      <div className="grid min-h-64 place-content-center gap-3 text-muted" role="status">
+        Loading the map…
+      </div>
+    );
 
   const { MAP_SIZE, STATE_SHAPES } = map;
   const flipLeft = card && card.x > card.width * 0.6; // keep the card on screen near the right edge
 
   return (
-    <div className="zone-map" ref={wrapRef} onPointerLeave={() => setVisible(false)}>
-      <svg viewBox={`0 0 ${MAP_SIZE.width} ${MAP_SIZE.height}`} role="group" aria-label="Map of U.S. states colored by hardiness zone">
+    <div className="relative grid gap-3" ref={wrapRef} onPointerLeave={() => setVisible(false)}>
+      <svg className="block h-auto w-full max-w-full" viewBox={`0 0 ${MAP_SIZE.width} ${MAP_SIZE.height}`} role="group" aria-label="Map of U.S. states colored by hardiness zone">
         {STATE_SHAPES.map((s) => {
           const [coldest, warmest] = STATE_ZONES[s.name].range;
           const label = `${s.name}, zones ${coldest} to ${warmest}`;
@@ -55,7 +73,7 @@ export default function ZoneMap({ onPick, selected }: { onPick: (state: StateSha
               key={s.fips}
               d={s.d}
               fill={zoneColor(middleZone(coldest, warmest))}
-              className={selected === s.name ? "is-selected" : undefined}
+              className={`${STATE} ${selected === s.name ? STATE_SELECTED : STATE_ACTIVE}`}
               tabIndex={0}
               role="button"
               aria-label={label}
@@ -76,12 +94,12 @@ export default function ZoneMap({ onPick, selected }: { onPick: (state: StateSha
 
       {card?.summary && (
         <div
-          className={`zone-card${visible ? " is-visible" : ""}`}
+          className={`${CARD} ${visible ? CARD_SHOWN : CARD_HIDDEN}`}
           style={{ left: card.x, top: card.y, transform: `translate(${flipLeft ? "calc(-100% - 14px)" : "14px"}, -50%)` }}
           aria-hidden="true"
         >
-          <strong>{card.summary.name}</strong>
-          <dl>
+          <strong className="font-display text-md">{card.summary.name}</strong>
+          <dl className="my-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-[0.15rem] [&_dt]:font-semibold [&_dt]:text-muted">
             <dt>Zones</dt>
             <dd>{card.summary.range}</dd>
             <dt>Last spring frost</dt>
@@ -91,14 +109,15 @@ export default function ZoneMap({ onPick, selected }: { onPick: (state: StateSha
             <dt>Growing season</dt>
             <dd>{card.summary.season}</dd>
           </dl>
-          <span className="zone-card-hint">Click to choose</span>
+          <span className="text-xs font-semibold text-green-ink">Click to choose</span>
         </div>
       )}
 
-      <ol className="zone-legend" aria-label="Zone colors">
+      {/* The key: "Zone" then each zone's color swatch. */}
+      <ol className="m-0 flex list-none flex-wrap gap-x-3 gap-y-1 p-0 text-xs text-muted before:font-semibold before:content-['Zone']" aria-label="Zone colors">
         {LEGEND.map((l) => (
-          <li key={l.zone}>
-            <i style={{ background: l.color }} aria-hidden="true" />
+          <li key={l.zone} className="inline-flex items-center gap-[0.3rem] tabular-nums">
+            <i className="size-[0.9rem] rounded-[3px]" style={{ background: l.color }} aria-hidden="true" />
             {l.zone}
           </li>
         ))}

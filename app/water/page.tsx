@@ -1,4 +1,4 @@
-import WaterSection from "@/frontend/sections/WaterSection";
+import WaterSection from "@/frontend/sections/water/WaterSection";
 
 export const metadata = {
   title: "Safe water",

@@ -1,4 +1,4 @@
-import RecipesSection from "@/frontend/sections/RecipesSection";
+import RecipesSection from "@/frontend/sections/recipes/RecipesSection";
 
 export const metadata = {
   title: "Recipes",

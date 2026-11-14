@@ -19,7 +19,9 @@ export function Art({ name, className }: { name: string; className?: string }) {
 export function Credit({ photo }: { photo: PhotoInfo | null }) {
   if (!photo) return null;
   return (
-    <span className="credit">
+    // "credit" lets a few layouts restyle it (e.g. the plant doctor centers it). Small muted text, its
+    // links in the same color.
+    <span className="credit block px-3 py-2 text-xs text-muted [&_a]:text-inherit">
       Photo:{" "}
       {/* Our own photos have no source page to link to. */}
       {photo.source ? (
@@ -50,13 +52,16 @@ export default function Photo({ slot, alt, fallback, credit = true }: { slot: st
   );
 }
 
+// A wide photo at the top of a page, in a rounded frame with a deep shadow, and its credit underneath.
+const HERO = "overflow-hidden rounded-lg border border-line bg-surface shadow-raised backdrop-blur-glass";
+
 export function Hero({ slot, alt }: { slot: string; alt: string }) {
   const photo = getPhoto(slot);
   if (!photo) return null;
   return (
-    <figure className="hero">
+    <figure className={HERO}>
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={photo.file} alt={alt} />
+      <img src={photo.file} alt={alt} className="h-[clamp(11rem,32vw,22rem)] w-full object-cover" />
       <figcaption>
         <Credit photo={photo} />
       </figcaption>

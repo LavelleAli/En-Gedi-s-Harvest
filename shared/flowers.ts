@@ -1,5 +1,6 @@
 // Roses, peonies, camellias and their companion plants from the En Gedi rose garden list
-// ("Rose Garden List with pics.pdf" in the Image Bank). Only the growing details are kept here; the
+// ("Rose Garden List with pics.pdf" in the Image Bank), plus four spring bulbs (grape hyacinth,
+// hyacinth, daffodil and tulip) added by hand with general growing details for Fulton County. Only the growing details are kept here; the
 // garden plan columns (placement, decision, dates, verses, costs, stores) stay in the spreadsheet.
 // Rows that only had a name were filled in from nursery and registry pages, listed in `sources`.
 import { CropSchema, type Crop, type FlowerGroup } from "@/shared/crop";
@@ -65,8 +66,31 @@ function base(group: FlowerGroup, name: string, d: Details): Record<string, unkn
       how: "Plant in fall or late winter in acidic, well-drained soil, with the top of the root ball slightly above the ground. Morning sun and afternoon shade suit it best. Mulch, but keep the mulch off the trunk. Prune right after it flowers, before next year's buds form.",
     };
   }
+  if (group === "bulb") return BULBS[name];
   return COMPANIONS[name];
 }
+
+// The spring bulbs: planted in fall once the soil cools (late October into December here), bloom the next spring.
+// Windows are weeks from the first fall frost. Tulips want a longer winter than Georgia gives, so they go in last.
+const BULB_BASE = { family: "Asparagaceae", habit: "clump", sunHours: 6, shadeOk: true, waterIn: 0.5, rootIn: 10, method: "bulbs", spring: null, bed: "either", firstHarvest: "Blooms the next spring" };
+const BULBS: Record<string, Record<string, unknown>> = {
+  "Grape hyacinth": {
+    ...BULB_BASE, botanical: "Muscari armeniacum", zones: [4, 8], heightFt: 0.7, spacingIn: 3, rootIn: 6, depthIn: 3, fall: [-3, 6],
+    how: "Plant in fall in drifts, 3 in deep and 3 in apart, in well-drained soil. Leaves come up in fall and stay through winter; let them yellow before you cut them back. It spreads on its own year after year.",
+  },
+  Hyacinth: {
+    ...BULB_BASE, botanical: "Hyacinthus orientalis", zones: [4, 8], heightFt: 1, spacingIn: 6, depthIn: 6, fall: [-2, 6],
+    how: "Plant in fall, 6 in deep and 6 in apart, in well-drained soil; wear gloves, since the bulbs can itch. Leave the leaves until they yellow. Flowers get smaller after the first year in the South, so many gardeners add fresh bulbs every fall.",
+  },
+  Daffodil: {
+    ...BULB_BASE, botanical: "Narcissus (hybrids)", family: "Amaryllidaceae", zones: [3, 9], heightFt: 1.5, spacingIn: 6, depthIn: 6, fall: [-3, 6],
+    how: "Plant in fall, 6 in deep (about three times the bulb's height) and 6 in apart, in well-drained soil. Let the leaves yellow for about six weeks after bloom before cutting them. Deer and voles leave them alone, and they come back for years.",
+  },
+  Tulip: {
+    ...BULB_BASE, botanical: "Tulipa (hybrids)", family: "Liliaceae", zones: [3, 8], heightFt: 2, spacingIn: 5, depthIn: 7, fall: [2, 8],
+    how: "Chill the bulbs in the fridge (away from fruit) for 8–10 weeks, then plant in December, 6–8 in deep and 5 in apart, in well-drained soil. In Georgia most tulips bloom well only the first spring, so treat them as annuals.",
+  },
+};
 
 // The four companion plants in the sheet each need their own growing details.
 const COMPANIONS: Record<string, Record<string, unknown>> = {
@@ -80,6 +104,12 @@ const COMPANIONS: Record<string, Record<string, unknown>> = {
     waterIn: 1, heightFt: 0.6, spacingIn: 8, rootIn: 6, method: "transplant", depthIn: 0, spring: [-2, 4], fall: [-10, -6], fallMinZone: 8,
     firstHarvest: "Blooms in 6–8 weeks", how: "Set out plants or sow seed on the surface; it needs light to sprout. Shear it back by half when it stops blooming in summer heat, and it blooms again in fall.",
   },
+  "Japanese red maple": {
+    botanical: "Acer palmatum (red-leaf forms, e.g. 'Bloodgood')", family: "Sapindaceae", habit: "tree", zones: [5.5, 8.5], sunHours: 4, shadeOk: true,
+    waterIn: 1, heightFt: 20, spacingIn: 180, rootIn: 24, method: "container", depthIn: 0, spring: [-6, 2], fall: [-8, -2],
+    firstHarvest: "Red leaves spring to fall",
+    how: "Plant in fall or early spring with the root flare at or just above the soil, in moist, well-drained, slightly acidic soil. In the South give it morning sun and afternoon shade; hot afternoon sun scorches the leaf edges. Mulch 2–3 in (keep it off the trunk) and water deeply in dry spells, especially the first two summers. Prune lightly in late winter, only to remove crossing or dead branches.",
+  },
   "Kwanzan cherry": {
     botanical: "Prunus serrulata 'Kanzan'", family: "Rosaceae", habit: "tree", zones: [5, 8], sunHours: 6, shadeOk: false, waterIn: 1, heightFt: 25,
     spacingIn: 300, rootIn: 36, method: "container", depthIn: 0, spring: [-4, 2], fall: [-8, -2], firstHarvest: "Blooms in spring",
@@ -92,7 +122,7 @@ const COMPANIONS: Record<string, Record<string, unknown>> = {
   },
 };
 
-const GROUP_KIND: Record<FlowerGroup, string> = { rose: "Rose", peony: "Peony", camellia: "Camellia", companion: "" };
+const GROUP_KIND: Record<FlowerGroup, string> = { rose: "Rose", peony: "Peony", camellia: "Camellia", bulb: "Spring bulb", companion: "" };
 
 function flower(group: FlowerGroup, name: string, details: Details, extra: Extra = {}): Crop {
   const b = base(group, name, details);
@@ -155,6 +185,7 @@ export const FLOWERS: Crop[] = [
   flower("rose", "Heavenly Pink", { type: "Hybrid musk shrub (Lens, 1997)", height: "2.5–4 ft", color: "Clear pink, double rosettes in large clusters", sun: "Full sun/part shade", scent: "Light", space: "Plant about 2.5–3 ft apart", bloom: "Repeat; abundant", disease: "Healthy foliage per breeder; highly disease resistant; easy to propagate", companions: "Catmint + white allium" }),
   flower("rose", "Iceberg", { type: "Climber", height: "10–12 ft", color: "White", sun: "Full sun/part shade", scent: "Light", space: "Vigorous", bloom: "Repeat", disease: "Moderate; watch black spot in humid weather", companions: "Lavender + blue salvia + allium" }),
   flower("rose", "It's a Breeze", { type: "Ground Cover", height: "2-3ft", color: "Dark Red", sun: "Full sun", scent: "None", space: "Vigorous", companions: "Rosemary + dianthus" }),
+  flower("companion", "Japanese red maple", { type: "Small deciduous tree grown for its leaves", height: "15–20 ft, about as wide", color: "Deep red-purple leaves spring to summer; crimson in fall", sun: "Morning sun, afternoon shade in the South", scent: "None", space: "Rounded, spreading crown; 15–20 ft", bloom: "Tiny red flowers in spring; red winged seeds", disease: "Few problems; leaf scorch in hot sun or drought, and root rot in wet soil", companions: "Camellias + azaleas + ferns + hostas" }, { sources: [{ title: "UF/IFAS: Acer palmatum, Japanese maple", url: "https://ask.ifas.ufl.edu/publication/fp009" }] }),
   flower("companion", "Kwanzan cherry", { type: "Flowering tree", height: "15–25 ft", color: "Double pink", sun: "Full sun", scent: "Light", space: "Spreading crown", bloom: "Spring bloom", disease: "Moderate; susceptible to leaf spot, canker, borers, and scale", companions: "Creeping thyme + spring bulbs; keep the root flare clear" }),
   flower("rose", "Jasmina", { type: "Climber (Kordes, 2005)", height: "8–10 ft", color: "Lilac-pink cupped clusters", scent: "Light apple", bloom: "Repeat", disease: "Good" }),
   flower("rose", "Jude the Obscure", { type: "Shrub", height: "4-5ft", color: "Soft yellow/Peach", sun: "Full/Partial Sun", scent: "Extremely strong", bloom: "Repeat/continual", disease: "Strong", companions: "Coreopsis + sweet alyssum" }),
@@ -257,4 +288,8 @@ export const FLOWERS: Crop[] = [
   flower("peony", "The Best Inkstone (Mo Run Jue Lun)", { type: "Tree peony (Paeonia suffruticosa); double", height: "4–5 ft", color: "Deep crimson / dark red", sun: "Full sun to partial shade", scent: "Delicate fragrance", bloom: "Mid to late spring; midseason flowering", disease: "Not rated by source" }, { zones: [4, 7], sources: [{ title: "Breck's: The Best Inkstone", url: "https://www.brecks.com/products/the-best-inkstone-tree-peony" }] }),
   flower("peony", "Vivid Rose", { type: "Lactiflora; full double", height: "Medium (Hollingsworth)", color: "Bright medium pink", sun: "Full sun", scent: "Fragrant", space: "Strong stems; support large double blooms", bloom: "Late midseason–late season", disease: "Not rated by Hollingsworth" }),
   flower("peony", "Walter Faxon", { type: "Lactiflora; full double", height: "30–32 in (Old House Gardens); medium", color: "Shell pink; paler outer petals; fades in sun", sun: "Full sun", scent: "Fragrant; Best Fragrant", space: "Large bush; good support needed in rain", bloom: "Late midseason–late season (Hollingsworth)", disease: "No formal resistance rating" }),
+  flower("bulb", "Grape hyacinth", { type: "Spring bulb", height: "6–8 in", color: "Cobalt blue clusters", sun: "Full sun/part shade", scent: "Light grape scent", space: "3 in apart; spreads into drifts", bloom: "Early to mid spring", disease: "Few problems; rots in soggy soil", companions: "Daffodils + tulips + creeping thyme" }),
+  flower("bulb", "Hyacinth", { type: "Spring bulb", height: "8–12 in", color: "Blue, purple, pink, white", sun: "Full sun/part shade", scent: "Strong, sweet fragrance", space: "6 in apart", bloom: "Mid spring", disease: "Few problems; rots in soggy soil", companions: "Grape hyacinth + tulips + pansies" }),
+  flower("bulb", "Daffodil", { type: "Spring bulb", height: "12–20 in", color: "Yellow, white, orange, bicolors", sun: "Full sun/part shade", scent: "Light; some kinds fragrant", space: "6 in apart; clumps widen each year", bloom: "Late winter to mid spring", disease: "Few problems; deer and voles avoid them", companions: "Grape hyacinth + hellebores + roses" }),
+  flower("bulb", "Tulip", { type: "Spring bulb", height: "10–24 in", color: "Nearly every color but true blue", sun: "Full sun", scent: "Mostly none; a few light", space: "5 in apart", bloom: "Mid to late spring", disease: "Botrytis (tulip fire) in wet springs; squirrels dig the bulbs", companions: "Grape hyacinth + pansies + daffodils" }, { note: "Pre-chill 8–10 weeks and plant in December; usually an annual in Georgia." }),
 ];

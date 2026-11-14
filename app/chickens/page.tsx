@@ -1,4 +1,4 @@
-import { ChickensSection } from "@/frontend/sections/AnimalSections";
+import { ChickensSection } from "@/frontend/sections/animals/AnimalSections";
 
 export const metadata = {
   title: "Chickens",

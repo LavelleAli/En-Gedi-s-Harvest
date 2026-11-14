@@ -5,7 +5,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { CATALOG } from "@/shared/catalog";
 import { FLOWERS, heightFeet } from "@/shared/flowers";
-import { isGardenFlower } from "@/shared/crop";
+import { findCrop, isGardenFlower } from "@/shared/crop";
 import { suggestionsFor } from "@/shared/planting";
 import { slug } from "@/shared/slug";
 import photos from "@/frontend/data/photos.json";
@@ -25,6 +25,23 @@ describe("garden flowers", () => {
   it("are left out of the month-by-month planting suggestions", () => {
     for (let month = 0; month < 12; month++) {
       expect(suggestionsFor("8a", month, CATALOG).some((s) => isGardenFlower(s.crop))).toBe(false);
+    }
+  });
+
+  it("finds the Japanese red maple by its everyday names", () => {
+    for (const name of ["Japanese maple", "Japanese red maple", "Red Japanese maple", "Bloodgood Japanese maple"]) {
+      expect(findCrop(name, CATALOG)?.id, name).toBe("companion-japanese-red-maple");
+    }
+  });
+
+  it("has the four spring bulbs, planted in fall as bulbs and grown in zone 8a", () => {
+    for (const name of ["Grape hyacinth", "Hyacinth", "Daffodils", "Tulips"]) {
+      const bulb = findCrop(name, CATALOG);
+      expect(bulb?.flower?.group, name).toBe("bulb");
+      expect(bulb?.method).toBe("bulbs");
+      expect(bulb?.spring).toBeNull();
+      expect(bulb?.fall).not.toBeNull();
+      expect(bulb!.zones[0] <= 8 && bulb!.zones[1] >= 8, name).toBe(true);
     }
   });
 

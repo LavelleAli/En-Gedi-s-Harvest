@@ -3,12 +3,13 @@
 // Opens and closes a <dialog> with a 500ms fade (GSAP; timing and easing in frontend/lib/motion.ts).
 // A plain dialog.close() vanishes instantly, so closing first fades the window out and only calls
 // close() once the fade has finished. The dimmed backdrop fades with it through the --shown
-// variable (0 to 1), which globals.css reads in .fade-dialog::backdrop.
+// variable (0 to 1), which the Dialog component's backdrop reads.
 // While open, the dialog also carries the class "is-shown".
 //
 //   const { ref, open, close, onCancel, onClick } = useFadeDialog();
-//   <button onClick={open}>…</button>
-//   <dialog ref={ref} className="dialog fade-dialog" onCancel={onCancel} onClick={onClick}>…</dialog>
+//   <Button onClick={open}>…</Button>
+//   <Dialog dialogRef={ref} onCancel={onCancel} onBackdropClick={onClick} titleId="…">…</Dialog>
+// (Dialog is frontend/components/ui/Dialog.tsx: the window's look.)
 // Destructure it like this: React's lint rules treat the whole object as a ref and refuse fade.close.
 import { useCallback, useEffect, useRef, type MouseEvent, type SyntheticEvent } from "react";
 import { EASE, FADE, duration, gsap } from "@/frontend/lib/motion";

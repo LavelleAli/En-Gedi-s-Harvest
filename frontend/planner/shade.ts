@@ -1,12 +1,15 @@
 // The yard's sun-hours map: for every cell of a grid over the yard, how many hours of direct sun it
 // gets on a given day, after shade from the house, trees, sheds, hedges and fences. Each sample of the
 // sun's position casts a ray from the cell toward the sun; if it hits an obstacle, the cell is shaded.
+// A turned building, hedge or fence is a turned box: the ray is turned into the box's own frame first.
 import { roofHeight } from "@/frontend/planner/model";
 import { sunVector, type SunPosition, type Vec3 } from "@/frontend/planner/sun";
-import type { Footprint, Garden, Obstacle } from "@/frontend/planner/model";
+import type { Garden, Obstacle } from "@/frontend/planner/model";
+import { covers, extent, isAskew, toLocal, type Footprint } from "@/frontend/planner/footprint";
 
 /** A shape the shade test checks rays against: a box (buildings, hedges, fences) or a sphere (a tree's canopy). */
-export type Box = { type: "box"; minX: number; maxX: number; minY: number; maxY: number; minZ: number; maxZ: number };
+// A turned box keeps its bounds as drawn (around its center) plus `turn`, the item it was made from.
+export type Box = { type: "box"; minX: number; maxX: number; minY: number; maxY: number; minZ: number; maxZ: number; turn?: Footprint };
 export type Sphere = { type: "sphere"; cx: number; cy: number; cz: number; r: number };
 export type Shape = Box | Sphere;
 /** Sun hours for every cell of a grid over the yard (row by row), and the most any cell could get. */
@@ -26,11 +29,19 @@ export function shadeShapes(obstacles: readonly Obstacle[]): Shape[] {
     // A roof's shadow is drawn as a box at its average height: about 75% of the way up a gambrel
     // (it's steep and full most of the way across) and 60% for a shed's gable.
     const roof = roofHeight(o) * (o.kind === "house" ? 0.75 : 0.6);
-    return { type: "box", minX: o.x - o.w / 2, maxX: o.x + o.w / 2, minY: 0, maxY: o.h + roof, minZ: o.z - o.d / 2, maxZ: o.z + o.d / 2 };
+    const box: Box = { type: "box", minX: o.x - o.w / 2, maxX: o.x + o.w / 2, minY: 0, maxY: o.h + roof, minZ: o.z - o.d / 2, maxZ: o.z + o.d / 2 };
+    return o.rot ? { ...box, turn: { x: o.x, z: o.z, w: o.w, d: o.d, rot: o.rot } } : box;
   });
 }
 
 function hitsBox(px: number, py: number, pz: number, dx: number, dy: number, dz: number, b: Box): boolean {
+  if (b.turn) {
+    // Turn the ray's start and direction into the box's own frame (around its center).
+    const t = b.turn;
+    const [u, v] = toLocal(t, px, pz);
+    const [du, dv] = toLocal({ ...t, x: 0, z: 0 }, dx, dz);
+    [px, pz, dx, dz] = [t.x + u, t.z + v, du, dv];
+  }
   let tmin = 0;
   let tmax = Infinity;
   const axes = [
@@ -94,23 +105,32 @@ export function sunHoursGrid(garden: Pick<Garden, "yard" | "obstacles">, samples
   return { cell, cols, rows, hours, maxHours: samples.length * stepHours };
 }
 
-// Average and lowest sun hours over a bed's footprint.
+// Average and lowest sun hours over a bed's footprint. For a bed turned off the grid, only the cells
+// whose middles fall on the bed count (or the cell under its center, for a bed smaller than a cell).
 export function bedSunHours(bed: Footprint, grid: SunGrid): { avg: number; min: number } {
   const { cell, cols, rows, hours } = grid;
-  const c0 = Math.max(0, Math.floor((bed.x - bed.w / 2) / cell));
-  const c1 = Math.min(cols - 1, Math.floor((bed.x + bed.w / 2 - 1e-6) / cell));
-  const r0 = Math.max(0, Math.floor((bed.z - bed.d / 2) / cell));
-  const r1 = Math.min(rows - 1, Math.floor((bed.z + bed.d / 2 - 1e-6) / cell));
+  const box = extent(bed);
+  const askew = isAskew(bed);
+  const c0 = Math.max(0, Math.floor((bed.x - box.w / 2) / cell));
+  const c1 = Math.min(cols - 1, Math.floor((bed.x + box.w / 2 - 1e-6) / cell));
+  const r0 = Math.max(0, Math.floor((bed.z - box.d / 2) / cell));
+  const r1 = Math.min(rows - 1, Math.floor((bed.z + box.d / 2 - 1e-6) / cell));
   let sum = 0;
   let min = Infinity;
   let n = 0;
   for (let r = r0; r <= r1; r++) {
     for (let c = c0; c <= c1; c++) {
+      if (askew && !covers(bed, (c + 0.5) * cell, (r + 0.5) * cell)) continue;
       const h = hours[r * cols + c];
       sum += h;
       min = Math.min(min, h);
       n++;
     }
+  }
+  if (!n && askew) {
+    const c = Math.min(cols - 1, Math.max(0, Math.floor(bed.x / cell)));
+    const r = Math.min(rows - 1, Math.max(0, Math.floor(bed.z / cell)));
+    return { avg: hours[r * cols + c], min: hours[r * cols + c] };
   }
   if (!n) return { avg: 0, min: 0 };
   return { avg: sum / n, min };

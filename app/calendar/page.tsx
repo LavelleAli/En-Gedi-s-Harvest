@@ -1,4 +1,4 @@
-import CalendarSection from "@/frontend/sections/CalendarSection";
+import CalendarSection from "@/frontend/sections/calendar/CalendarSection";
 
 export const metadata = {
   title: "Calendar",

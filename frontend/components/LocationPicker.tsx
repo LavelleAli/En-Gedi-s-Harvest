@@ -12,6 +12,11 @@ import { STATE_ZONES } from "@/frontend/data/state-zones";
 import ZoneMap from "@/frontend/components/ZoneMap";
 import { ZONES } from "@/shared/zones";
 import type { StateShape } from "@/frontend/data/us-states";
+import Button from "@/frontend/components/ui/Button";
+import Dialog from "@/frontend/components/ui/Dialog";
+import Field from "@/frontend/components/ui/Field";
+import Hint from "@/frontend/components/ui/Hint";
+import Kicker from "@/frontend/components/ui/Kicker";
 
 // What the dialog is editing. Coordinates stay strings while typed; they're checked on save.
 type Draft = {
@@ -120,46 +125,53 @@ export default function LocationPicker() {
 
   return (
     <>
-      <button type="button" className="location-button" onClick={open} aria-haspopup="dialog">
-        <span className="kicker">Zone {location.zone} · {location.place}</span>
-        <span className="location-change">Change</span>
+      {/* Looks like a line of text on the masthead, not a button. On phones it stops short of the theme switch in the corner. */}
+      <button
+        type="button"
+        className="inline-flex min-h-8 flex-wrap items-baseline justify-start justify-self-start gap-x-2 gap-y-0 border-0 bg-transparent p-0 text-start text-inherit shadow-none hover:bg-transparent max-md:max-w-[calc(100%-6.5rem)]"
+        onClick={open}
+        aria-haspopup="dialog"
+        data-tour="location"
+      >
+        <Kicker as="span" tone="masthead">
+          Zone {location.zone} · {location.place}
+        </Kicker>
+        <span className="text-xs font-semibold text-mast-fg underline underline-offset-[0.2em] print:hidden">Change</span>
       </button>
-      {/* The window is placed at the end of <body>, not inside the dark masthead, so it keeps the
-          page's normal text and button colors. */}
+      {/* The window is placed at the end of <body>, not inside the masthead, so it keeps the page's
+          normal text and button colors. */}
       {inBrowser && createPortal(
-        <dialog ref={dialogRef} className="dialog dialog-wide fade-dialog" aria-labelledby="loc-title" onCancel={onCancel} onClick={onClick}>
+        <Dialog dialogRef={dialogRef} onCancel={onCancel} onBackdropClick={onClick} titleId="loc-title" wide>
           {draft?.step === "map" && (
-            <div className="stack">
+            <div className="grid content-start gap-4">
               <h2 id="loc-title">Where is your garden?</h2>
-              <p className="pmeta">Point at a state to see its zones and frost dates, then click it. Your choice stays in this browser.</p>
+              <p>Point at a state to see its zones and frost dates, then click it. Your choice stays in this browser.</p>
               <ZoneMap onPick={pickState} selected={location.place} />
-              <div className="two-col">
-                <div className="field">
-                  <label htmlFor="loc-state">Or choose your state from a list</label>
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8.5rem),1fr))] gap-3">
+                <Field id="loc-state" label="Or choose your state from a list">
                   <select id="loc-state" defaultValue="" onChange={(e) => pickStateByName(e.target.value)}>
                     <option value="" disabled>Pick a state…</option>
                     {STATE_NAMES.map((n) => <option key={n} value={n}>{n}</option>)}
                   </select>
-                </div>
+                </Field>
               </div>
-              <div className="row-actions dialog-actions">
-                <button type="button" className="link-button" onClick={() => patch({ step: "details", state: null })}>
+              <div className="flex flex-wrap items-center gap-2 pt-2">
+                <Button variant="link" onClick={() => patch({ step: "details", state: null })}>
                   Outside the U.S.? Pick your zone directly
-                </button>
-                <button type="button" onClick={closeDialog}>Cancel</button>
+                </Button>
+                <Button onClick={closeDialog}>Cancel</Button>
               </div>
             </div>
           )}
 
           {draft?.step === "details" && (
-            <form className="stack" onSubmit={save}>
+            <form className="grid content-start gap-4" onSubmit={save}>
               <h2 id="loc-title">{draft.state ? draft.state.name : "Your garden's location"}</h2>
-              <div className="field">
-                <label htmlFor="loc-zone">Your USDA hardiness zone</label>
+              <Field id="loc-zone" label="Your USDA hardiness zone">
                 <select id="loc-zone" value={draft.zone} onChange={(e) => setDraft({ ...draft, zone: e.target.value })} aria-describedby="loc-zone-hint">
                   {zoneChoices.map((z) => <option key={z} value={z}>Zone {z}</option>)}
                 </select>
-                <p className="hint" id="loc-zone-hint">
+                <Hint id="loc-zone-hint">
                   {draft.state ? `${draft.state.name} runs from zone ${draft.state.range}. ` : ""}
                   Confirm yours by ZIP code on the{" "}
                   <a href="https://planthardiness.ars.usda.gov/" target="_blank" rel="noopener noreferrer">USDA zone map</a>.
@@ -169,40 +181,46 @@ export default function LocationPicker() {
                       <a href="https://planthardiness.gc.ca/" target="_blank" rel="noopener noreferrer">hardiness maps</a>.
                     </>
                   )}
-                </p>
-              </div>
-              <div className="field">
-                <label htmlFor="loc-place">Name for this garden <span className="optional">(optional)</span></label>
+                </Hint>
+              </Field>
+              <Field id="loc-place" label="Name for this garden" note="(optional)">
                 <input id="loc-place" type="text" maxLength={60} autoComplete="address-level2" value={draft.place} onChange={(e) => setDraft({ ...draft, place: e.target.value })} placeholder="Backyard, Calgary" />
-              </div>
-              <fieldset className="field">
-                <legend>Coordinates <span className="optional">(optional, for sun angles)</span></legend>
-                <div className="row-actions">
-                  <button type="button" onClick={useDevice}>Use my location</button>
+              </Field>
+              <Field group label="Coordinates" note="(optional, for sun angles)">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button onClick={useDevice}>Use my location</Button>
                 </div>
-                <p className="hint" role="status">{geoStatus}</p>
-                <div className="two-col">
-                  <div className="field">
-                    <label htmlFor="loc-lat">Latitude</label>
+                <Hint role="status">{geoStatus}</Hint>
+                <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,8.5rem),1fr))] gap-3">
+                  <Field id="loc-lat" label="Latitude">
                     <input id="loc-lat" type="number" inputMode="decimal" step="0.01" min="-90" max="90" value={draft.lat} onChange={(e) => setDraft({ ...draft, lat: e.target.value, fromDevice: false, coordsFromState: false })} />
-                  </div>
-                  <div className="field">
-                    <label htmlFor="loc-lon">Longitude</label>
+                  </Field>
+                  <Field id="loc-lon" label="Longitude">
                     <input id="loc-lon" type="number" inputMode="decimal" step="0.01" min="-180" max="180" value={draft.lon} onChange={(e) => setDraft({ ...draft, lon: e.target.value, fromDevice: false, coordsFromState: false })} />
-                  </div>
+                  </Field>
                 </div>
-                <p className="hint">
+                <Hint>
                   {draft.coordsFromState ? "Filled in with the middle of the state. Use my location for a closer estimate." : "Left blank, the planner estimates them from your zone and time zone."}
-                </p>
-              </fieldset>
-              <div className="row-actions dialog-actions">
-                <button type="submit" className="btn-primary">Save location</button>
-                <button type="button" onClick={() => patch({ step: "map" })}>Back to the map</button>
-                <button type="button" className="link-button" onClick={() => { saveLocation(null); closeDialog(); }}>Reset to Fulton County, GA</button>
+                </Hint>
+              </Field>
+              <div className="flex flex-wrap items-center gap-2 pt-2">
+                <Button variant="primary" type="submit">
+                  Save location
+                </Button>
+                <Button onClick={() => patch({ step: "map" })}>Back to the map</Button>
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    saveLocation(null);
+                    closeDialog();
+                  }}
+                >
+                  Reset to Fulton County, GA
+                </Button>
               </div>
             </form>
           )}
-        </dialog>,
+        </Dialog>,
         document.body,
       )}
     </>

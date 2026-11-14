@@ -1,4 +1,4 @@
-import ShopSection from "@/frontend/sections/ShopSection";
+import ShopSection from "@/frontend/sections/shop/ShopSection";
 
 export const metadata = {
   title: "Shop",

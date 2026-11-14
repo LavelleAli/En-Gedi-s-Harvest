@@ -1,4 +1,4 @@
-import AccountPage from "@/frontend/account/AccountPage";
+import AccountPage from "@/frontend/sections/account/AccountPage";
 
 export const metadata = { title: "Account", robots: { index: false } };
 

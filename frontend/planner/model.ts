@@ -1,9 +1,13 @@
 // The garden plan: yard size and orientation, beds, and the things that cast shade (house, trees,
 // fences). Saved in this browser's localStorage. Positions are in feet from the plan's top-left
-// corner and mark each item's center; w runs left to right, d top to bottom, h is height.
+// corner and mark each item's center; w runs left to right, d top to bottom, h is height. `rot` turns an
+// item clockwise on the plan, in degrees (missing = 0, so plans saved before turning existed still load).
 import { useSyncExternalStore } from "react";
 import { z } from "zod";
 import { CropSchema, type Crop } from "@/shared/crop";
+import { extent, isAskew, normalizeRot, type Footprint } from "./footprint";
+
+export type { Footprint } from "./footprint";
 
 export const GARDEN_KEY = "fhb-garden";
 export const CROPS_KEY = "fhb-crops";
@@ -22,18 +26,23 @@ export const OBSTACLES: Record<ObstacleKind, { label: string; w: number; d: numb
   fence: { label: "Fence", w: 20, d: 0.5, h: 6 },
 };
 
+/** The most crops one bed can hold. */
+export const MAX_CROPS = 12;
+
 const num = (min: number, max: number) => z.number().finite().min(min).max(max);
 const id = z.string().regex(/^[a-z0-9-]{1,40}$/);
+// Degrees clockwise; any number is accepted and stored as 0–359.x.
+const rot = z.number().finite().min(-3600).max(3600).transform(normalizeRot).optional();
 
 const BedSchema = z.object({
   id, kind: z.literal("bed"), name: z.string().max(40),
   type: z.enum(["raised", "in-ground"]),
-  x: num(-50, 600), z: num(-50, 600), w: num(1, 100), d: num(1, 100), h: num(0, 4),
-  crops: z.array(z.string().max(60)).max(12),
+  x: num(-50, 600), z: num(-50, 600), w: num(1, 100), d: num(1, 100), h: num(0, 4), rot,
+  crops: z.array(z.string().max(60)).max(MAX_CROPS),
 });
 const ObstacleSchema = z.object({
   id, kind: z.enum(OBSTACLE_KINDS), name: z.string().max(40),
-  x: num(-50, 600), z: num(-50, 600), w: num(0.3, 200), d: num(0.3, 200), h: num(1, 120),
+  x: num(-50, 600), z: num(-50, 600), w: num(0.3, 200), d: num(0.3, 200), h: num(1, 120), rot,
 });
 export const GardenSchema = z.object({
   v: z.literal(1),
@@ -49,8 +58,6 @@ export type Bed = Garden["beds"][number];
 export type Obstacle = Garden["obstacles"][number];
 /** Anything placed in the yard: a bed or a shade source. */
 export type Item = Bed | Obstacle;
-/** What placement math needs: a center (x, z) and a footprint (w × d), in feet. */
-export type Footprint = { x: number; z: number; w: number; d: number };
 
 export const STARTER_GARDEN: Garden = {
   v: 1,
@@ -142,11 +149,13 @@ export function useCustomCrops() {
   return [crops, save, remove] as const;
 }
 
-// Keep an item inside the yard.
+// Keep an item inside the yard (a turned item by the upright box around it). Positions round to
+// 0.5 ft, or to 0.001 ft for an item turned off the grid, so copies of a turned fence still meet end to end.
 export function clampToYard<T extends Footprint>(item: T, yard: Yard): T {
-  const halfW = Math.min(item.w, yard.w) / 2;
-  const halfD = Math.min(item.d, yard.d) / 2;
-  const snap = (v: number) => Math.round(v * 2) / 2;
+  const box = extent(item);
+  const halfW = Math.min(box.w, yard.w) / 2;
+  const halfD = Math.min(box.d, yard.d) / 2;
+  const snap = isAskew(item) ? (v: number) => Math.round(v * 1000) / 1000 : (v: number) => Math.round(v * 2) / 2;
   return {
     ...item,
     x: Math.min(yard.w - halfW, Math.max(halfW, snap(item.x))),
@@ -168,7 +177,7 @@ export function roofHeight(o: { kind: string; w: number; d: number }): number {
 // ---------- Snap to grid ----------
 // Dragging, arrow-key nudges and new items line up on a grid, like Blender's increment snapping.
 // The item's top-left corner lands on a grid line (so its edges line up, not its middle), then it's
-// kept inside the yard. Typing a position in the editor isn't snapped: a typed number is kept.
+// kept inside the yard. A turned item lines up the top-left corner of the upright box around it. Typing a position in the editor isn't snapped: a typed number is kept.
 export const SNAP_KEY = "fhb-snap";
 export const SNAP_STEPS = [0.5, 1, 2, 5]; // feet
 export type Snap = { on: boolean; step: number };
@@ -176,8 +185,9 @@ export const DEFAULT_SNAP: Snap = { on: true, step: 1 };
 
 export function snapToGrid<T extends Footprint>(item: T, yard: Yard, step: number): T {
   if (!step) return clampToYard(item, yard);
-  const w = Math.min(item.w, yard.w);
-  const d = Math.min(item.d, yard.d);
+  const box = extent(item);
+  const w = Math.min(box.w, yard.w);
+  const d = Math.min(box.d, yard.d);
   const onGrid = (v: number) => Math.round(v / step) * step;
   const round = (v: number) => Math.round(v * 1000) / 1000; // drops floating-point dust like 12.000000001
   return {
@@ -238,14 +248,19 @@ export function nextName(name: string, items: readonly { name: string }[]): stri
   return `${base} ${highest + 1}`.slice(0, 40);
 }
 
-const inside = (item: Footprint, yard: Yard): boolean => item.x - item.w / 2 >= -0.01 && item.x + item.w / 2 <= yard.w + 0.01 && item.z - item.d / 2 >= -0.01 && item.z + item.d / 2 <= yard.d + 0.01;
+const inside = (item: Footprint, yard: Yard): boolean => {
+  const { w, d } = extent(item);
+  return item.x - w / 2 >= -0.01 && item.x + w / 2 <= yard.w + 0.01 && item.z - d / 2 >= -0.01 && item.z + d / 2 <= yard.d + 0.01;
+};
+const tidy = (v: number) => Math.round(v * 1000) / 1000;
 
 // One copy placed end to end with the original along its long side (a fence or hedge continues
 // its line; a tree goes beside it). If there's no room on that side, it goes on the other side.
+// A turned item's copy follows the turn, so a fence at 30° carries on at 30°.
 export function duplicateNextTo(item: Obstacle, yard: Yard, items: readonly Item[]): Obstacle {
   const across = item.w >= item.d;
-  const step = across ? item.w : item.d;
-  const tryAt = (dir: number): Obstacle => ({ ...item, ...(across ? { x: item.x + dir * step } : { z: item.z + dir * step }) });
+  const [ex, ez] = across ? toPlanDir(item, item.w, 0) : toPlanDir(item, 0, item.d);
+  const tryAt = (dir: number): Obstacle => ({ ...item, x: tidy(item.x + dir * ex), z: tidy(item.z + dir * ez) });
   const placed = [tryAt(1), tryAt(-1)].find((c) => inside(c, yard)) ?? tryAt(1);
   return clampToYard({ ...placed, id: newId(item.kind), name: nextName(item.name, items) }, yard);
 }
@@ -256,9 +271,16 @@ export function duplicateNextTo(item: Obstacle, yard: Yard, items: readonly Item
 export type Copies = { added: Obstacle[]; skipped: number };
 export type Edge = "top" | "bottom" | "left" | "right";
 
+// A step of (u, v) feet in the item's own frame, as a step on the plan.
+function toPlanDir(item: Footprint, u: number, v: number): [number, number] {
+  const a = ((item.rot ?? 0) * Math.PI) / 180;
+  return [u * Math.cos(a) - v * Math.sin(a), u * Math.sin(a) + v * Math.cos(a)];
+}
+
 export function rowOf(item: Obstacle, { count, direction, gap = 0 }: { count: number; direction: "across" | "down"; gap?: number }, yard: Yard, items: readonly Item[]): Copies {
   const room = MAX_OBSTACLES - items.filter((i) => i.kind !== "bed").length;
-  const step = (direction === "across" ? item.w : item.d) + Math.max(0, gap);
+  const box = extent(item); // a turned item is spaced by the upright box around it
+  const step = (direction === "across" ? box.w : box.d) + Math.max(0, gap);
   const added: Obstacle[] = [];
   let all: Item[] = [...items];
   for (let i = 1; i <= count && added.length < room; i++) {
@@ -273,13 +295,15 @@ export function rowOf(item: Obstacle, { count, direction, gap = 0 }: { count: nu
 
 // Lines a whole edge of the yard ("top", "bottom", "left" or "right") with copies of the item.
 // Fences and hedges become as few long pieces as possible (200 ft at most each); trees, sheds and
-// houses repeat side by side, `gap` feet apart. The original stays where it is.
+// houses repeat side by side, `gap` feet apart, keeping their turn. The original stays where it is.
 export function lineEdge(item: Obstacle, edge: Edge, yard: Yard, items: readonly Item[], gap = 0): Copies {
   const room = MAX_OBSTACLES - items.filter((i) => i.kind !== "bed").length;
   const horizontal = edge === "top" || edge === "bottom";
   const length = horizontal ? yard.w : yard.d;
-  const thick = STRETCHY.has(item.kind) ? Math.min(item.w, item.d) : horizontal ? item.d : item.w;
-  const along = STRETCHY.has(item.kind) ? null : horizontal ? item.w : item.d;
+  const stretchy = STRETCHY.has(item.kind);
+  const box = extent(item);
+  const thick = stretchy ? Math.min(item.w, item.d) : horizontal ? box.d : box.w;
+  const along = stretchy ? null : horizontal ? box.w : box.d;
   // Where each piece's center sits across the edge: just inside the yard boundary.
   const offset = edge === "top" || edge === "left" ? thick / 2 : (horizontal ? yard.d : yard.w) - thick / 2;
 
@@ -298,7 +322,9 @@ export function lineEdge(item: Obstacle, edge: Edge, yard: Yard, items: readonly
   const added: Obstacle[] = [];
   let all: Item[] = [...items];
   for (const p of pieces.slice(0, room)) {
-    const footprint = horizontal ? { w: p.size, d: thick, x: p.center, z: offset } : { w: thick, d: p.size, x: offset, z: p.center };
+    const at = horizontal ? { x: p.center, z: offset } : { x: offset, z: p.center };
+    // A fence or hedge piece runs straight along the edge (no turn); anything else keeps its size and turn.
+    const footprint = stretchy ? { ...at, ...(horizontal ? { w: p.size, d: thick } : { w: thick, d: p.size }), rot: 0 } : at;
     const piece = clampToYard({ ...item, ...footprint, id: newId(item.kind), name: nextName(item.name, all) }, yard);
     added.push(piece);
     all = [...all, piece];
