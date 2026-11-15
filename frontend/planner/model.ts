@@ -48,9 +48,17 @@ const BedSchema = z.object({
   x: num(-50, 600), z: num(-50, 600), w: num(1, 100), d: num(1, 100), h: num(0, 4), rot,
   crops: z.array(z.string().max(60)).max(MAX_CROPS),
 });
+// What was typed into an animal or water item's Setup box (see setup.ts). Each kind uses only its own
+// keys; missing ones fall back to a default, so items saved before Setup existed still load.
+const SetupSchema = z.object({
+  birds: num(1, 200), gallons: num(1, 100000), hives: num(1, 50), roof: num(10, 20000), rain: num(0.1, 20),
+}).partial();
 const ObstacleSchema = z.object({
   id, kind: z.enum(OBSTACLE_KINDS), name: z.string().max(40),
   x: num(-50, 600), z: num(-50, 600), w: num(0.3, 200), d: num(0.3, 200), h: num(1, 120), rot,
+  setup: SetupSchema.optional(),
+  // The Health checklist's ticked items, by id (see health.ts).
+  health: z.array(z.string().regex(/^[a-z]{1,20}$/)).max(10).optional(),
 });
 export const GardenSchema = z.object({
   v: z.literal(1),
@@ -64,6 +72,7 @@ export type Garden = z.infer<typeof GardenSchema>;
 export type Yard = Garden["yard"];
 export type Bed = Garden["beds"][number];
 export type Obstacle = Garden["obstacles"][number];
+export type Setup = z.infer<typeof SetupSchema>;
 /** Anything placed in the yard: a bed or a shade source. */
 export type Item = Bed | Obstacle;
 

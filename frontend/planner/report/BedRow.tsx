@@ -6,7 +6,7 @@ import { LIGHT_TONE, type BedFacts } from "./bedFacts";
 
 const ROW = [
   // A full-width flat button: text on the left, badges and an arrow on the right.
-  "grid w-full min-h-[4.5rem] grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 rounded-md border-transparent bg-transparent px-3 py-2 text-start shadow-none",
+  "grid w-full min-h-[3.5rem] grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 rounded-md border-transparent bg-transparent px-3 py-1 text-start shadow-none",
   // Pointed at: a light fill and hairline (300ms, from the base button style).
   "hover:border-line-strong hover:bg-surface",
 ].join(" ");
@@ -23,14 +23,17 @@ export default function BedRow({ bed, facts, onOpen }: BedRowProps) {
     <button type="button" className={`bed-row ${ROW}`} aria-haspopup="dialog" onClick={onOpen}>
       <span className="grid min-w-0 gap-0.5">
         <span className={`${LINE} text-md font-bold`}>{bed.name}</span>
-        <span className={`${LINE} text-sm font-normal text-muted`}>
-          {facts.kind} · {facts.size}
+        <span className={`${LINE} text-sm font-normal`}>
+          {crops}
+          <span className="text-muted">
+            {" "}
+            · {facts.kind} · {facts.size}
+          </span>
         </span>
-        <span className={`${LINE} text-sm font-normal`}>{crops}</span>
       </span>
       <span className="flex items-center gap-2">
-        {/* Stacked, so they fit beside the text on a phone too. */}
-        <span className="flex flex-col items-end gap-1.5">
+        {/* Side by side, wrapping to a second line on a phone. */}
+        <span className="flex flex-wrap items-center justify-end gap-1.5">
           {facts.problems > 0 && <Badge tone="red">{facts.problems} to check</Badge>}
           <Badge tone={LIGHT_TONE[facts.light.id]}>
             {facts.light.label} · {facts.hours.toFixed(1)} h

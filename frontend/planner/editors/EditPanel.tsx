@@ -43,7 +43,7 @@ export default function EditPanel({ garden, selected, crops, cropsById, zone, mo
         />
       )}
       {selected && selected.kind !== "bed" && (
-        <ObstacleEditor item={selected} onChange={(patch) => onPatch(selected.id, patch)} onDelete={() => onDelete(selected.id)} onClose={() => onSelect(null)} />
+        <ObstacleEditor item={selected} garden={garden} onChange={(patch) => onPatch(selected.id, patch)} onDelete={() => onDelete(selected.id)} onClose={() => onSelect(null)} />
       )}
       {!selected && <YardEditor garden={garden} onYard={onYard} onReset={onReset} />}
       <div className="border-t border-line pt-3">
