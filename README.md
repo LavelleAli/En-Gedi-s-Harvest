@@ -45,7 +45,7 @@ The **garden report** below gives the day's sunrise, sunset and sun angle, and a
 
 In a bed's panel, choose **Add a crop that isn't listed…** and type a name. The app looks in this order:
 
-1. **The stock list** of 57 plants. Free.
+1. **The stock list** of 59 plants. Free.
 2. **The shared library** of every plant anyone has researched. Free, no account needed.
 3. **Research with Claude.** Needs a free account. Claude searches extension services and seed companies and writes a growing guide for your zone, with links to its sources. The result joins the shared library for everyone. Free accounts get 5 a month; the **Garden plan** ($3/month) is unlimited. A lookup only counts when new research runs, and failed lookups are refunded.
 
@@ -206,7 +206,7 @@ backend/             everything that runs on the server (Vercel functions)
 shared/              used by both sides
 ├─ zones.ts          USDA zones and frost dates
 ├─ crop.ts           the crop record schema (Zod) and name matching
-├─ catalog.ts        the 57-plant stock catalog
+├─ catalog.ts        the 59-plant stock catalog
 └─ planting.ts       planting windows and zone suggestions
 tests/               Playwright end-to-end tests (desktop Chrome, phone Safari)
 **/__tests__/        Vitest unit tests (shared, planner math, backend rules)

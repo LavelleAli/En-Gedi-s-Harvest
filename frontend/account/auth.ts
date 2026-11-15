@@ -73,8 +73,25 @@ const MESSAGES: Record<string, string> = {
   "auth/popup-closed-by-user": "The Google window closed before sign-in finished.",
   "auth/popup-blocked": "Your browser blocked the Google sign-in window. Allow pop-ups for this site and try again.",
   "auth/network-request-failed": "Can't reach the sign-in service. Check your connection.",
+  "auth/operation-not-allowed": "That way of signing in isn't turned on for this site yet. Try another way, or come back later.",
 };
-export const authMessage = (err: unknown): string => MESSAGES[String((err as { code?: unknown })?.code)] || "Sign-in didn't work. Try again.";
+
+// Errors from how Firebase is set up for the site (a bad API key, sign-in not turned on for the project,
+// this address not on the authorized list). The reader can't fix these, so the message says so, and the
+// code goes to the console for the site owner. Firebase builds some codes from the server's own text, like
+// "auth/api-key-not-valid.-please-pass-a-valid-api-key.", hence the prefix match.
+const SETUP_CODES = ["auth/invalid-api-key", "auth/api-key-not-valid", "auth/configuration-not-found", "auth/unauthorized-domain", "auth/app-not-authorized"];
+const SETUP_MESSAGE = "Sign-in isn't set up correctly on this site, so it can't work right now. It's not your email or password. Try again later.";
+export const isSetupError = (code: string): boolean => SETUP_CODES.some((c) => code === c || code.startsWith(`${c}.`));
+
+export const authMessage = (err: unknown): string => {
+  const code = String((err as { code?: unknown })?.code ?? "");
+  if (isSetupError(code)) {
+    console.error(JSON.stringify({ level: "error", msg: "firebase auth setup", code })); // the code only, never the key
+    return SETUP_MESSAGE;
+  }
+  return MESSAGES[code] || "Sign-in didn't work. Try again.";
+};
 
 // The sign-in actions run only where accounts are on (the buttons are hidden otherwise).
 async function sdk(): Promise<Sdk> {

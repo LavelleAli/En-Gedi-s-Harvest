@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CATALOG, CATALOG_BY_ID } from "@/shared/catalog";
-import { findCrop, matchCropIds, normalizeName } from "@/shared/crop";
+import { findCrop, matchCropIds, normalizeName, suitsZone } from "@/shared/crop";
 import { plantingWindows, seasonFit, suggestionsFor } from "@/shared/planting";
 import { frostDays, zoneShift } from "@/shared/zones";
 import { PLANTS } from "@/frontend/data/plants";
@@ -31,6 +31,19 @@ describe("names", () => {
     expect(findCrop("zucchini", CATALOG)?.id).toBe("summer-squash");
     expect(findCrop("Scallions", CATALOG)?.id).toBe("onion");
     expect(matchCropIds("cabbage family", CATALOG)).toEqual(expect.arrayContaining(["cabbage", "kale", "broccoli", "collards"]));
+  });
+
+  it("keeps Emerald blueberry apart from the general blueberry, and suited to zone 8a", () => {
+    expect(findCrop("Emerald blueberries", CATALOG)?.id).toBe("emerald-blueberry");
+    expect(findCrop("Blueberry", CATALOG)?.id).toBe("blueberry");
+    expect(findCrop("rabbiteye blueberry", CATALOG)?.id).toBe("blueberry");
+    expect(suitsZone(CATALOG_BY_ID["emerald-blueberry"], 8)).toBe(true); // zone 8a
+  });
+
+  it("finds cantaloupe by its other names and counts it as a cucurbit", () => {
+    for (const name of ["Cantaloupe", "cantaloupes", "muskmelon", "rockmelon", "cantalope"]) expect(findCrop(name, CATALOG)?.id, name).toBe("cantaloupe");
+    expect(findCrop("melon", CATALOG)?.id).toBe("watermelon");
+    expect(matchCropIds("cucurbit", CATALOG)).toContain("cantaloupe");
   });
 });
 

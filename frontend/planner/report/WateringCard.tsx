@@ -8,6 +8,13 @@ import type { Bed } from "../model";
 
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
+// Scrolls inside the card past about eight beds, the day headings staying in view (on a solid fill so rows
+// don't show through). On paper it's printed in full.
+const SCROLL = [
+  "max-h-[22rem] overflow-y-auto overscroll-contain print:max-h-none",
+  "[&_thead_th]:sticky [&_thead_th]:top-0 [&_thead_th]:z-[1] [&_thead_th]:bg-panel-solid",
+].join(" ");
+
 // The bed names down the side: row headings in body text, not the column headings' small capitals.
 const ROW_HEADING = "bg-transparent font-body text-sm tracking-normal text-fg normal-case";
 
@@ -27,9 +34,9 @@ export default function WateringCard({ monthName, active, restingNote }: Waterin
       {active.length > 0 ? (
         <>
           <p className="text-sm text-muted">Gallons per watering, by day</p>
-          {/* Compact: tight cells, so the whole week fits the card. */}
-          <TableCard fit>
-            <table className="[&_:is(th,td)]:px-2">
+          {/* Compact: tight cells, so the whole week fits the card. Focusable so it scrolls from the keyboard. */}
+          <TableCard fit className={SCROLL} tabIndex={0} role="region" aria-label="Watering schedule, scrolls">
+            <table className="[&_:is(th,td)]:px-2 [&_:is(th,td)]:py-1.5">
               <caption className="sr-only">Gallons of water per bed for each day of the week</caption>
               <thead>
                 <tr>

@@ -15,15 +15,23 @@ const EVENT = "fhb-garden-change";
 
 export const BED_TYPES = { raised: "Raised bed", "in-ground": "In-ground bed" } as const;
 export type BedType = keyof typeof BED_TYPES;
-export const OBSTACLE_KINDS = ["house", "shed", "tree", "hedge", "fence"] as const;
+// Everything in the yard that isn't a bed. They all cast shade and share the 60-item limit; `group` says
+// which list in Add to the yard they sit in.
+export const OBSTACLE_KINDS = ["house", "shed", "tree", "hedge", "fence", "coop", "fishfarm", "hive", "tank", "filter"] as const;
 export type ObstacleKind = (typeof OBSTACLE_KINDS)[number];
-/** Each kind's label and the size a new one starts at (feet). */
-export const OBSTACLES: Record<ObstacleKind, { label: string; w: number; d: number; h: number }> = {
-  house: { label: "House", w: 30, d: 20, h: 12 },
-  shed: { label: "Shed", w: 8, d: 10, h: 8 },
-  tree: { label: "Tree", w: 16, d: 16, h: 25 },
-  hedge: { label: "Hedge", w: 12, d: 3, h: 5 },
-  fence: { label: "Fence", w: 20, d: 0.5, h: 6 },
+export type ObstacleGroup = "shade" | "animals" | "water";
+/** Each kind's label, its Add to the yard list, and the size a new one starts at (feet). */
+export const OBSTACLES: Record<ObstacleKind, { label: string; group: ObstacleGroup; w: number; d: number; h: number }> = {
+  house: { label: "House", group: "shade", w: 30, d: 20, h: 12 },
+  shed: { label: "Shed", group: "shade", w: 8, d: 10, h: 8 },
+  tree: { label: "Tree", group: "shade", w: 16, d: 16, h: 25 },
+  hedge: { label: "Hedge", group: "shade", w: 12, d: 3, h: 5 },
+  fence: { label: "Fence", group: "shade", w: 20, d: 0.5, h: 6 },
+  coop: { label: "Chicken coop", group: "animals", w: 6, d: 8, h: 6 },
+  fishfarm: { label: "Fish farm", group: "animals", w: 8, d: 4, h: 3 },
+  hive: { label: "Beehive", group: "animals", w: 1.7, d: 1.4, h: 3 },
+  tank: { label: "Water tank", group: "water", w: 4, d: 4, h: 6 },
+  filter: { label: "Water filter", group: "water", w: 2, d: 2, h: 3 },
 };
 
 /** The most crops one bed can hold. */
@@ -40,9 +48,17 @@ const BedSchema = z.object({
   x: num(-50, 600), z: num(-50, 600), w: num(1, 100), d: num(1, 100), h: num(0, 4), rot,
   crops: z.array(z.string().max(60)).max(MAX_CROPS),
 });
+// What was typed into an animal or water item's Setup box (see setup.ts). Each kind uses only its own
+// keys; missing ones fall back to a default, so items saved before Setup existed still load.
+const SetupSchema = z.object({
+  birds: num(1, 200), gallons: num(1, 100000), hives: num(1, 50), roof: num(10, 20000), rain: num(0.1, 20),
+}).partial();
 const ObstacleSchema = z.object({
   id, kind: z.enum(OBSTACLE_KINDS), name: z.string().max(40),
   x: num(-50, 600), z: num(-50, 600), w: num(0.3, 200), d: num(0.3, 200), h: num(1, 120), rot,
+  setup: SetupSchema.optional(),
+  // The Health checklist's ticked items, by id (see health.ts).
+  health: z.array(z.string().regex(/^[a-z]{1,20}$/)).max(10).optional(),
 });
 export const GardenSchema = z.object({
   v: z.literal(1),
@@ -56,6 +72,7 @@ export type Garden = z.infer<typeof GardenSchema>;
 export type Yard = Garden["yard"];
 export type Bed = Garden["beds"][number];
 export type Obstacle = Garden["obstacles"][number];
+export type Setup = z.infer<typeof SetupSchema>;
 /** Anything placed in the yard: a bed or a shade source. */
 export type Item = Bed | Obstacle;
 

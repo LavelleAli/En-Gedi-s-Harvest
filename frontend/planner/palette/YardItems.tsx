@@ -1,6 +1,6 @@
 // "In this yard", the panel under the sandbox's right half (beside the editor): everything in the yard, beds first
-// then shade sources. Click one to select it (it fills green and its editor opens below), or ⧉ to
-// duplicate a shade source next to it. The names flow into as many columns as fit. Beside the editor
+// then everything else (shade sources, animals, water gear). Click one to select it (it fills green and its editor opens below), or ⧉ to
+// duplicate a non-bed item next to it. The names flow into as many columns as fit. Beside the editor
 // the list fills the panel (which is as tall as the editor) and scrolls inside it, so a long list never
 // makes the panel taller; stacked on a phone it scrolls after about 16rem. Not printed.
 import { useState } from "react";
@@ -44,7 +44,7 @@ export default function YardItems({ garden, selectedId, onSelect, onAddItems }: 
   const shadeCount = garden.obstacles.length;
 
   const duplicate = (item: Obstacle) => {
-    if (shadeCount >= MAX_OBSTACLES) return setMessage(`The planner holds up to ${MAX_OBSTACLES} shade sources. Delete one to add more.`);
+    if (shadeCount >= MAX_OBSTACLES) return setMessage(`The planner holds up to ${MAX_OBSTACLES} items besides beds. Delete one to add more.`);
     const copy = duplicateNextTo(item, garden.yard, items);
     onAddItems([copy], copy.id);
     setMessage(`Added ${copy.name}.`);
@@ -55,7 +55,7 @@ export default function YardItems({ garden, selectedId, onSelect, onAddItems }: 
       <div className="flex flex-wrap items-baseline justify-between gap-x-3">
         <h3>In this yard</h3>
         <p className="text-xs text-muted">
-          {shadeCount} of {MAX_OBSTACLES} shade sources
+          {shadeCount} of {MAX_OBSTACLES} items besides beds
         </p>
       </div>
       {items.length === 0 ? (

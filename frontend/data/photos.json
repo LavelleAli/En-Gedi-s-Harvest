@@ -966,5 +966,12 @@
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "source": "https://commons.wikimedia.org/wiki/File:Acer_palmatum_%27Bloodgood%27_kz01.jpg",
     "query": "File:Acer palmatum 'Bloodgood' kz01.jpg"
+  },
+  "plant-cantaloupe": {
+    "file": "/photos/plant-cantaloupe.jpg",
+    "title": "Cantaloupes on the vine",
+    "source": "",
+    "artist": "En Gedi's Harvest",
+    "license": "used with permission"
   }
 }

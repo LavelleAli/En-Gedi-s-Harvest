@@ -253,5 +253,8 @@
   "plant-japanese-red-maple": {
     "query": "Acer palmatum Bloodgood",
     "file": "File:Acer palmatum 'Bloodgood' kz01.jpg"
+  },
+  "plant-cantaloupe": {
+    "query": "Cucumis melo cantaloupe vine"
   }
 }
