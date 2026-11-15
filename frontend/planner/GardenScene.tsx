@@ -24,8 +24,8 @@ import { SCENE_BOX } from "@/frontend/planner/scene/sceneStyle";
 type Palette = (typeof PALETTES)["light"];
 
 const PALETTES = {
-  light: { sky: 0xefe7da, lawn: 0xa3a86a, outside: 0xd3c8b2, gridLine: 0x80864c, soil: 0x6e4c30, wood: 0xa57a45, wall: 0xe0d6c6, roof: 0x8a4f3c, houseWall: 0xf3f1ec, houseRoof: 0x4a5059, trim: 0xfbfaf7, glass: 0x2b3a42, shutter: 0x8db4d9, door: 0x8fb8dc, brick: 0xa4513c, trunk: 0x6b4a33, leaf: 0x3f7134, hedge: 0x46733b, fence: 0x9c7c57, select: 0xc99a4e, path: 0xb98a2c, label: "#13233a" },
-  dark: { sky: 0x101612, lawn: 0x55602f, outside: 0x1c241e, gridLine: 0x6f7a3e, soil: 0x4a3322, wood: 0x7d5c37, wall: 0x9b9387, roof: 0x6a3d30, houseWall: 0xb9b6ae, houseRoof: 0x353a41, trim: 0xc9c7c1, glass: 0x162026, shutter: 0x5d7e9e, door: 0x6385a6, brick: 0x7a3d2e, trunk: 0x4f3826, leaf: 0x2f5a2a, hedge: 0x34582e, fence: 0x7a6146, select: 0xdcb46a, path: 0xdcb46a, label: "#ece2d0" },
+  light: { sky: 0xefe7da, lawn: 0xa3a86a, outside: 0xd3c8b2, gridLine: 0x80864c, soil: 0x6e4c30, wood: 0xa57a45, wall: 0xe0d6c6, roof: 0x8a4f3c, houseWall: 0xf3f1ec, houseRoof: 0x4a5059, trim: 0xfbfaf7, glass: 0x2b3a42, shutter: 0x8db4d9, door: 0x8fb8dc, brick: 0xa4513c, trunk: 0x6b4a33, leaf: 0x3f7134, hedge: 0x46733b, fence: 0x9c7c57, water: 0x3d6f8f, hiveBox: 0xe8dcc0, tankBody: 0x4a5059, select: 0xc99a4e, path: 0xb98a2c, label: "#13233a" },
+  dark: { sky: 0x101612, lawn: 0x55602f, outside: 0x1c241e, gridLine: 0x6f7a3e, soil: 0x4a3322, wood: 0x7d5c37, wall: 0x9b9387, roof: 0x6a3d30, houseWall: 0xb9b6ae, houseRoof: 0x353a41, trim: 0xc9c7c1, glass: 0x162026, shutter: 0x5d7e9e, door: 0x6385a6, brick: 0x7a3d2e, trunk: 0x4f3826, leaf: 0x2f5a2a, hedge: 0x34582e, fence: 0x7a6146, water: 0x2a4c63, hiveBox: 0xb8ad94, tankBody: 0x353a41, select: 0xdcb46a, path: 0xdcb46a, label: "#ece2d0" },
 };
 const KIND_COLOR: Record<Kind, number> = { veg: 0x4f8f3a, herb: 0x7aa860, fruit: 0x3f7d3a, flower: 0x8f6fb0 };
 const FRUIT_COLOR: Record<string, number | undefined> = { strawberry: 0xd23a33, tomato: 0xd8442f, pepper: 0xd8442f, blueberry: 0x4a5fa8, citrus: 0xf0a020, apple: 0xc8372d, persimmon: 0xe58a2a, watermelon: 0x2f7a3a, "winter-squash": 0xe08a2a };
@@ -192,8 +192,14 @@ function buildObstacle(o: Obstacle, palette: Palette): THREE.Group {
     const trunkH = o.h - canopyR;
     mesh(new THREE.CylinderGeometry(0.35, 0.55, trunkH, 8), palette.trunk, trunkH / 2);
     mesh(new THREE.SphereGeometry(canopyR, 18, 12), palette.leaf, o.h - canopyR);
+  } else if (o.kind === "tank" || o.kind === "filter") {
+    // Round: a cylinder as wide as the shorter side.
+    const r = Math.min(o.w, o.d) / 2;
+    mesh(new THREE.CylinderGeometry(r, r, o.h, 20), o.kind === "tank" ? palette.tankBody : palette.trim, o.h / 2);
   } else {
-    mesh(new THREE.BoxGeometry(o.w, o.h, o.d), o.kind === "hedge" ? palette.hedge : palette.fence, o.h / 2);
+    // Boxes: hedge, fence, coop (wood), fish farm (water-colored tank), beehive (painted box).
+    const color = { hedge: palette.hedge, coop: palette.wood, fishfarm: palette.water, hive: palette.hiveBox }[o.kind as string] ?? palette.fence;
+    mesh(new THREE.BoxGeometry(o.w, o.h, o.d), color, o.h / 2);
   }
   return group;
 }

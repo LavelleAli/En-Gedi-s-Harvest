@@ -1,7 +1,8 @@
 "use client";
 
 // "Add to the yard", the panel over the sandbox's left half (beside Sun and shade):
-//   - Add a raised or in-ground bed, or a shade source (house, shed, tree, hedge, fence), with one click.
+//   - Add a raised or in-ground bed, a shade source (house, shed, tree, hedge, fence), an animal setup
+//     (chicken coop, fish farm, beehive) or water gear (water tank, water filter), with one click.
 //   - With one selected: repeat it in a row, or line a whole edge of the yard with it.
 // The list of what's in the yard is its own panel under the sandbox (YardItems.tsx).
 // The copy math (spacing, edges, the 60-item limit) lives in model.ts so it's unit-tested.
@@ -10,7 +11,7 @@ import FormMessage from "@/frontend/components/ui/FormMessage";
 import { MAX_OBSTACLES, OBSTACLES, lineEdge, rowOf, type BedType, type Copies, type Garden, type Obstacle, type ObstacleKind } from "../model";
 import { PANEL, SIDE_PANEL } from "../panelStyle";
 import AddBedButtons from "./AddBedButtons";
-import AddShadeButtons from "./AddShadeButtons";
+import AddKindButtons from "./AddKindButtons";
 import RepeatTools, { type RowSettings } from "./RepeatTools";
 
 const GROUP = "grid content-start gap-2";
@@ -50,7 +51,15 @@ export default function AddPanel({ garden, selectedId, onAddBed, onAdd, onAddIte
       </div>
       <div className={GROUP}>
         <h4>Shade sources</h4>
-        <AddShadeButtons onAdd={onAdd} full={full} />
+        <AddKindButtons group="shade" label="Add a shade source" onAdd={onAdd} full={full} />
+      </div>
+      <div className={GROUP}>
+        <h4>Animals</h4>
+        <AddKindButtons group="animals" label="Add an animal setup" onAdd={onAdd} full={full} />
+      </div>
+      <div className={GROUP}>
+        <h4>Water</h4>
+        <AddKindButtons group="water" label="Add water gear" onAdd={onAdd} full={full} />
       </div>
       {selected && (
         <RepeatTools

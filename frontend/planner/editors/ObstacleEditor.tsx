@@ -1,4 +1,4 @@
-// Editing a shade source (house, shed, tree, hedge, fence): its name, size, height, position, turn, and
+// Editing anything that isn't a bed (shade sources, chicken coop, fish farm, beehive, water tank, filter): its name, size, height, position, turn, and
 // deleting it. A tree has one canopy width instead of width and depth.
 import { useId } from "react";
 import Button from "@/frontend/components/ui/Button";
